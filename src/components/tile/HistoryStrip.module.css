@@ -1,28 +1,37 @@
+/**
+ * A vertical log in the side rail, newest at the top — so the round you just
+ * played is always the one nearest the board.
+ */
 .strip {
   display: flex;
-  gap: var(--space-3);
-  overflow-x: auto;
-  padding: var(--space-1) var(--space-1) var(--space-3);
-  scroll-snap-type: x proximity;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 340px;
+  overflow-y: auto;
+  /* Room for the scrollbar so entries do not sit under it. */
+  padding-right: var(--space-1);
 }
 
 .empty {
   color: var(--text-faint);
   font-size: var(--text-sm);
   font-style: italic;
-  padding: var(--space-3) var(--space-1);
+  line-height: 1.6;
 }
 
 .entry {
   flex: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'tiles head'
+    'tiles foot';
+  align-items: center;
+  gap: 2px var(--space-3);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--bg-panel);
-  scroll-snap-align: start;
   animation: pop-in var(--duration-base) var(--ease-spring);
   transition:
     border-color var(--duration-base) var(--ease-out),
@@ -30,7 +39,7 @@
 }
 
 .entry:hover {
-  transform: translateY(-2px);
+  transform: translateX(2px);
   border-color: var(--border-strong);
 }
 
@@ -38,11 +47,18 @@
 .loss { border-left: 3px solid var(--negative); }
 .push { border-left: 3px solid var(--accent); }
 
-.head {
+.tiles {
+  grid-area: tiles;
   display: flex;
-  align-items: center;
+  gap: 3px;
+}
+
+.head {
+  grid-area: head;
+  display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .round {
@@ -64,16 +80,12 @@
 .loss .outcome { color: var(--negative); }
 .push .outcome { color: var(--accent); }
 
-.tiles {
-  display: flex;
-  gap: 4px;
-}
-
 .foot {
+  grid-area: foot;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
@@ -92,4 +104,11 @@
 .points {
   color: var(--positive);
   font-weight: 700;
+}
+
+/* Alongside the other rail panels on narrower screens, so it can breathe. */
+@media (max-width: 1040px) {
+  .strip {
+    max-height: 260px;
+  }
 }

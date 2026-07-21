@@ -113,7 +113,14 @@ export function LandingScreen({
 
           <div className={styles.fan} aria-hidden="true">
             {showcase.map((tile, index) => (
-              <Tile key={tile.instanceId} tile={tile} values={showcaseValues} size="md" index={index} />
+              <Tile
+                key={tile.instanceId}
+                tile={tile}
+                values={showcaseValues}
+                size="md"
+                index={index}
+                hoverable
+              />
             ))}
           </div>
 

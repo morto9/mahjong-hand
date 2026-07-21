@@ -5,6 +5,12 @@
   min-width: 0;
 }
 
+/* Value centred under its label, for stats read as a row of counters. */
+.center {
+  align-items: center;
+  text-align: center;
+}
+
 .label {
   font-family: var(--font-mono);
   font-size: var(--text-xs);

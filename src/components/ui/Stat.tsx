@@ -13,6 +13,8 @@ interface StatProps {
   animateChange?: boolean;
   /** Counts numerically up to the new value instead of snapping. */
   countUp?: boolean;
+  /** Centres the value under its label. Default aligns both to the start. */
+  align?: 'start' | 'center';
   title?: string;
 }
 
@@ -24,6 +26,7 @@ export function Stat({
   size = 'md',
   animateChange = false,
   countUp = false,
+  align = 'start',
   title,
 }: StatProps) {
   const displayed = useCountUp(value, countUp);
@@ -31,7 +34,12 @@ export function Stat({
 
   return (
     <div
-      className={cx(styles.stat, size === 'lg' && styles.lg, tone !== 'default' && styles[tone])}
+      className={cx(
+        styles.stat,
+        size === 'lg' && styles.lg,
+        align === 'center' && styles.center,
+        tone !== 'default' && styles[tone],
+      )}
       title={title}
     >
       <span className={styles.label}>{label}</span>

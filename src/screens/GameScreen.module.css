@@ -27,18 +27,13 @@
   backdrop-filter: blur(10px);
 }
 
-.hudStats {
+/* Score leads on the left; the round counters sit together on the right. */
+.counters {
   display: flex;
   gap: var(--space-6);
-  flex: 1;
-  min-width: 0;
-  overflow-x: auto;
-}
-
-.hudActions {
-  display: flex;
-  gap: var(--space-2);
-  flex: none;
+  margin-left: auto;
+  /* Room for the fixed settings control in the corner. */
+  padding-right: var(--space-7);
 }
 
 /* ── Body ───────────────────────────────────────────────────────────────── */
@@ -140,11 +135,6 @@
   animation: fade-in var(--duration-base) var(--ease-out) both;
 }
 
-/* ── History ────────────────────────────────────────────────────────────── */
-.history {
-  min-height: 0;
-}
-
 @media (max-width: 1040px) {
   .body {
     display: flex;
@@ -174,18 +164,13 @@
   }
 
   .hud {
-    flex-direction: column;
-    align-items: stretch;
     gap: var(--space-4);
     padding: var(--space-4);
   }
 
-  .hudStats {
-    gap: var(--space-5);
-  }
-
-  .hudActions {
-    justify-content: space-between;
+  .counters {
+    gap: var(--space-4);
+    padding-right: 0;
   }
 
   .table {

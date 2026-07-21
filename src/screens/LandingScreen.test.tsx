@@ -133,7 +133,9 @@ describe('resuming a saved run', () => {
     render(<App />);
 
     await user.click(screen.getByRole('button', { name: /new game/i }));
-    await user.click(screen.getByRole('button', { name: /exit to menu/i }));
+    // Exit lives in the settings menu, which has to be opened first.
+    await user.click(screen.getByRole('button', { name: /settings/i }));
+    await user.click(screen.getByRole('button', { name: /exit game/i }));
 
     expect(screen.getByRole('button', { name: /resume run/i })).toBeInTheDocument();
   });

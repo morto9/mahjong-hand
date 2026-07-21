@@ -7,7 +7,7 @@
  */
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { DEFAULT_CONFIG, type GameConfig } from '@/domain/config';
 import { GameProvider } from '@/state/GameProvider';
@@ -15,13 +15,12 @@ import { faceDownTiles, faceUpTiles, statValue } from '@/test/helpers';
 import { GameScreen } from './GameScreen';
 
 function renderGame(config: GameConfig = DEFAULT_CONFIG) {
-  const onExit = vi.fn();
   render(
     <GameProvider config={config}>
-      <GameScreen onExit={onExit} />
+      <GameScreen />
     </GameProvider>,
   );
-  return { onExit, user: userEvent.setup() };
+  return { user: userEvent.setup() };
 }
 
 /** The reveal is on a timer, so waits must outlast it. */
@@ -125,10 +124,11 @@ describe('the betting loop', () => {
       .toBeInTheDocument();
   });
 
-  it('leaves the table when asked', async () => {
-    const { user, onExit } = renderGame();
+  it('shows the round counters centred as a group', () => {
+    renderGame();
 
-    await user.click(screen.getByRole('button', { name: /exit to menu/i }));
-    expect(onExit).toHaveBeenCalledOnce();
+    expect(statValue('Hand')).toBe('1');
+    expect(statValue('Streak')).toBe('—');
+    expect(statValue('Best')).toBe('0');
   });
 });

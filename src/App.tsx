@@ -7,8 +7,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { SoundToggle } from '@/components/ui/SoundToggle';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { SettingsMenu } from '@/components/ui/SettingsMenu';
 import { configFromSearchParams } from '@/domain/config';
 import type { GameState } from '@/domain/types';
 import { GameProvider, useGame } from '@/state/GameProvider';
@@ -97,10 +96,11 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
 
   return (
     <div className={styles.app}>
-      <div className={styles.toolbar}>
-        <SoundToggle />
-        <ThemeToggle />
-      </div>
+      {/* Exit only appears while there is a run to leave. */}
+      <SettingsMenu
+        className={styles.settings}
+        onExitGame={screen === 'game' ? exitGame : undefined}
+      />
 
       {/* Keyed by screen so each entrance animation replays on navigation. */}
       <div key={screen} className={styles.screen}>
@@ -113,7 +113,7 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
           />
         )}
 
-        {screen === 'game' && <GameScreen onExit={exitGame} />}
+        {screen === 'game' && <GameScreen />}
 
         {screen === 'summary' && (
           <SummaryScreen

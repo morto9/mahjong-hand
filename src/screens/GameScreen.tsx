@@ -6,7 +6,6 @@ import { RoundFeedback } from '@/components/game/RoundFeedback';
 import { TileValueRail } from '@/components/game/TileValueRail';
 import { HandDisplay } from '@/components/tile/HandDisplay';
 import { HistoryStrip } from '@/components/tile/HistoryStrip';
-import { Button } from '@/components/ui/Button';
 import { Panel } from '@/components/ui/Panel';
 import { Stat } from '@/components/ui/Stat';
 import type { TileTypeId } from '@/domain/types';
@@ -15,11 +14,7 @@ import { useGame } from '@/state/GameProvider';
 import { useHonorValues, useRecentHistory } from '@/state/useGameSelectors';
 import styles from './GameScreen.module.css';
 
-interface GameScreenProps {
-  onExit: () => void;
-}
-
-export function GameScreen({ onExit }: GameScreenProps) {
+export function GameScreen() {
   const { state, config, placeBet, continueRound } = useGame();
   const history = useRecentHistory();
   const honors = useHonorValues();
@@ -36,28 +31,27 @@ export function GameScreen({ onExit }: GameScreenProps) {
   return (
     <main className={styles.screen}>
       <header className={styles.hud}>
-        <div className={styles.hudStats}>
-          <Stat label="Score" value={state.score} size="lg" tone="accent" countUp />
-          <Stat label="Hand" value={state.round} />
+        <Stat label="Score" value={state.score} size="lg" tone="accent" countUp />
+
+        <div className={styles.counters}>
+          <Stat label="Hand" value={state.round} align="center" />
           <Stat
             label="Streak"
             value={state.streak > 0 ? `${state.streak}×` : '—'}
             tone={state.streak > 0 ? 'positive' : 'default'}
+            align="center"
             animateChange
           />
-          <Stat label="Best" value={state.bestStreak} />
-        </div>
-
-        <div className={styles.hudActions}>
-          <Button variant="ghost" size="sm" onClick={onExit}>
-            ← Exit to menu
-          </Button>
+          <Stat label="Best" value={state.bestStreak} align="center" />
         </div>
       </header>
 
       <div className={styles.body}>
         <div className={styles.rail}>
           <DeckStatus />
+          <Panel title="History">
+            <HistoryStrip rounds={history} values={state.values} />
+          </Panel>
         </div>
 
         <section className={cx(styles.table, outcome && styles[outcome])} aria-label="Table">
@@ -134,10 +128,6 @@ export function GameScreen({ onExit }: GameScreenProps) {
           <TileValueRail />
         </div>
       </div>
-
-      <Panel title="History" className={styles.history}>
-        <HistoryStrip rounds={history} values={state.values} />
-      </Panel>
     </main>
   );
 }

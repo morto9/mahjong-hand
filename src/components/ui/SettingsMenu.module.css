@@ -1,0 +1,114 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  background: var(--bg-panel);
+  backdrop-filter: blur(8px);
+}
+
+.trigger[aria-expanded='true'] {
+  color: var(--text-strong);
+  border-color: var(--border-strong);
+}
+
+.gear {
+  display: inline-block;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.trigger:hover .gear,
+.trigger[aria-expanded='true'] .gear {
+  transform: rotate(90deg);
+}
+
+/**
+ * The panel sits directly beneath the trigger with its gap held as padding, so
+ * the pointer never crosses dead space on the way down — moving between the two
+ * stays inside the wrapper, and the menu does not flicker shut.
+ */
+.panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding-top: var(--space-2);
+  z-index: 20;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 190px;
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-lg);
+  transform-origin: top right;
+  animation: menu-in var(--duration-fast) var(--ease-out) both;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Each row reads as a label with its current state on the right. */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--text);
+  text-align: left;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.item:hover {
+  background: var(--bg-panel-strong);
+  color: var(--text-strong);
+}
+
+.icon {
+  flex: none;
+  width: 1.25em;
+  font-variant-emoji: text;
+  text-align: center;
+}
+
+.state {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.separator {
+  height: 1px;
+  margin: var(--space-1) 0;
+  background: var(--border);
+}
+
+.exit {
+  color: var(--negative);
+}
+
+.exit:hover {
+  background: color-mix(in srgb, var(--negative) 14%, transparent);
+  color: var(--negative);
+}

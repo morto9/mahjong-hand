@@ -9,23 +9,9 @@
   animation: screen-in var(--duration-slow) var(--ease-out) both;
 }
 
-.toolbar {
+.settings {
   position: fixed;
   top: var(--space-4);
   right: var(--space-4);
-  z-index: 10;
-  display: flex;
-  gap: var(--space-1);
-  padding: 2px;
-  border-radius: var(--radius-pill);
-  background: var(--bg-panel);
-  backdrop-filter: blur(8px);
-}
-
-@media (max-width: 560px) {
-  .toolbar {
-    top: auto;
-    bottom: var(--space-3);
-    right: var(--space-3);
-  }
+  z-index: 20;
 }

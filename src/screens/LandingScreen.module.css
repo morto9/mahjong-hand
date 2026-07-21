@@ -78,14 +78,38 @@
   margin-top: var(--space-3);
 }
 
+/**
+ * Each tile settles at its own angle.
+ *
+ * The rest position has to live in the animation's end frame, not in a plain
+ * `transform` on the element: `deal-in` fills forwards to `transform: none`,
+ * which silently flattened the fan back into a straight row.
+ */
 .fan > * {
-  animation: deal-in var(--duration-slow) var(--ease-out) both;
+  --fan-rotate: 0deg;
+  --fan-lift: 0px;
+  animation: fan-in var(--duration-slow) var(--ease-out) both;
 }
 
-.fan > *:nth-child(1) { animation-delay: 120ms; transform: rotate(-6deg); }
-.fan > *:nth-child(2) { animation-delay: 190ms; transform: translateY(-6px); }
-.fan > *:nth-child(3) { animation-delay: 260ms; transform: rotate(5deg); }
-.fan > *:nth-child(4) { animation-delay: 330ms; transform: translateY(-4px) rotate(9deg); }
+@keyframes fan-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-38px) rotate(-9deg) scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(calc(var(--fan-lift) + 3px)) rotate(var(--fan-rotate)) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(var(--fan-lift)) rotate(var(--fan-rotate));
+  }
+}
+
+.fan > *:nth-child(1) { animation-delay: 120ms; --fan-rotate: -6deg; }
+.fan > *:nth-child(2) { animation-delay: 190ms; --fan-lift: -6px; }
+.fan > *:nth-child(3) { animation-delay: 260ms; --fan-rotate: 5deg; }
+.fan > *:nth-child(4) { animation-delay: 330ms; --fan-lift: -4px; --fan-rotate: 9deg; }
 
 /* ── Side column ────────────────────────────────────────────────────────── */
 .side {

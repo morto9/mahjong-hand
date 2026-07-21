@@ -172,6 +172,12 @@ A finished run is cleared rather than saved — it belongs on the summary screen
   render as monochrome outlines.
 - **Theme** follows `prefers-color-scheme`; the toggle cycles auto → light → dark and writes
   `data-theme` on the root, which wins over the media query in both directions.
+- **One settings control** holds sound, theme and exit, revealed on hover. Hover alone would strand
+  keyboard and touch users, so it also opens on click and on focus, and closes on Escape, on a click
+  outside, or when the pointer leaves. "Leaves" is deliberately careful: moving from the trigger into
+  the panel below must not count, and Safari (which does not focus buttons on click) and jsdom both
+  omit the `relatedTarget` that would say so — so when it is missing, the check defers a tick and
+  looks at where focus actually landed.
 - **Motion** is centralised in `styles/animations.css` and disabled wholesale under
   `prefers-reduced-motion: reduce`, which also defaults sound to off and makes the score snap
   instead of counting up.
