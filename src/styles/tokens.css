@@ -1,0 +1,171 @@
+/**
+ * Design tokens.
+ *
+ * Every colour, radius, shadow and duration in the app resolves to a variable
+ * declared here. Retheming — a new palette, a seasonal skin, a high-contrast
+ * mode — is a matter of overriding this block, not editing components.
+ *
+ * Palette: lacquered mahjong parlour. Deep jade felt, warm ivory tiles,
+ * cinnabar and gold accents.
+ */
+
+:root {
+  /* ── Surfaces (dark is the default; the table is felt) ─────────────────── */
+  --felt-900: #071411;
+  --felt-800: #0b1d18;
+  --felt-700: #0f2822;
+  --felt-600: #14332b;
+  --felt-500: #1b4238;
+
+  --ivory-100: #fbf6ea;
+  --ivory-200: #f4ead8;
+  --ivory-300: #e6d8bf;
+  --ivory-400: #cdbb9c;
+
+  /* ── Accents ───────────────────────────────────────────────────────────── */
+  --cinnabar: #d4483b;
+  --cinnabar-soft: #e8705f;
+  --jade: #3fa987;
+  --jade-soft: #6fd0ae;
+  --gold: #d7ac5c;
+  --gold-soft: #ecc987;
+
+  /* ── Semantic roles ────────────────────────────────────────────────────── */
+  --bg: var(--felt-900);
+  --bg-raised: var(--felt-800);
+  --bg-panel: rgba(255, 255, 255, 0.035);
+  --bg-panel-strong: rgba(255, 255, 255, 0.06);
+  --border: rgba(244, 234, 216, 0.12);
+  --border-strong: rgba(244, 234, 216, 0.22);
+
+  --text: var(--ivory-200);
+  --text-strong: var(--ivory-100);
+  --text-muted: rgba(244, 234, 216, 0.58);
+  --text-faint: rgba(244, 234, 216, 0.36);
+
+  --accent: var(--gold);
+  --positive: var(--jade-soft);
+  --negative: var(--cinnabar-soft);
+  --neutral: var(--ivory-400);
+
+  /* Tile faces */
+  --tile-face-top: #fdfaf1;
+  --tile-face-bottom: #e4d6b9;
+  --tile-edge: #b9a684;
+  --tile-back-top: #1e6b56;
+  --tile-back-bottom: #0f3d31;
+  --tile-ink: #23312c;
+  --suit-bamboo: #2f7d55;
+  --suit-character: #1f3f6b;
+  --suit-dot: #1f5f7d;
+  --suit-dragon: #b8382c;
+  --suit-wind: #3c3a52;
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
+  --text-4xl: clamp(2.75rem, 8vw, 4.5rem);
+
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.16em;
+
+  /* ── Space (4px base) ──────────────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* ── Radii ─────────────────────────────────────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ── Elevation ─────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 18px -6px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 22px 48px -18px rgba(0, 0, 0, 0.7);
+  --shadow-tile: 0 2px 0 var(--tile-edge), 0 8px 18px -6px rgba(0, 0, 0, 0.6);
+  --glow-gold: 0 0 0 1px rgba(215, 172, 92, 0.4), 0 0 28px -6px rgba(215, 172, 92, 0.45);
+
+  /* ── Motion ────────────────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 140ms;
+  --duration-base: 260ms;
+  --duration-slow: 480ms;
+  --duration-reveal: 620ms;
+
+  /* ── Layout ────────────────────────────────────────────────────────────── */
+  --shell-max: 1180px;
+}
+
+/**
+ * Light theme — a bone-and-bamboo daytime parlour.
+ * Applied when the OS prefers light, and overridable by an explicit
+ * `data-theme` on the root (the in-app toggle sets that).
+ */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #efe9dc;
+    --bg-raised: #f7f2e7;
+    --bg-panel: rgba(15, 40, 34, 0.04);
+    --bg-panel-strong: rgba(15, 40, 34, 0.07);
+    --border: rgba(15, 40, 34, 0.14);
+    --border-strong: rgba(15, 40, 34, 0.26);
+
+    --text: #17332b;
+    --text-strong: #0a1f19;
+    --text-muted: rgba(23, 51, 43, 0.62);
+    --text-faint: rgba(23, 51, 43, 0.4);
+
+    --accent: #a67420;
+    --positive: #1f7a5c;
+    --negative: #b23a2d;
+    --neutral: #6d6350;
+
+    --shadow-sm: 0 1px 2px rgba(20, 40, 33, 0.12);
+    --shadow-md: 0 6px 18px -8px rgba(20, 40, 33, 0.3);
+    --shadow-lg: 0 22px 48px -20px rgba(20, 40, 33, 0.38);
+    --glow-gold: 0 0 0 1px rgba(166, 116, 32, 0.35), 0 0 24px -8px rgba(166, 116, 32, 0.4);
+  }
+}
+
+:root[data-theme='light'] {
+  --bg: #efe9dc;
+  --bg-raised: #f7f2e7;
+  --bg-panel: rgba(15, 40, 34, 0.04);
+  --bg-panel-strong: rgba(15, 40, 34, 0.07);
+  --border: rgba(15, 40, 34, 0.14);
+  --border-strong: rgba(15, 40, 34, 0.26);
+
+  --text: #17332b;
+  --text-strong: #0a1f19;
+  --text-muted: rgba(23, 51, 43, 0.62);
+  --text-faint: rgba(23, 51, 43, 0.4);
+
+  --accent: #a67420;
+  --positive: #1f7a5c;
+  --negative: #b23a2d;
+  --neutral: #6d6350;
+
+  --shadow-sm: 0 1px 2px rgba(20, 40, 33, 0.12);
+  --shadow-md: 0 6px 18px -8px rgba(20, 40, 33, 0.3);
+  --shadow-lg: 0 22px 48px -20px rgba(20, 40, 33, 0.38);
+  --glow-gold: 0 0 0 1px rgba(166, 116, 32, 0.35), 0 0 24px -8px rgba(166, 116, 32, 0.4);
+}

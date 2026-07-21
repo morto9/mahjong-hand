@@ -1,0 +1,70 @@
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 132px;
+  justify-content: center;
+  animation: pop-in var(--duration-base) var(--ease-spring);
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.win .headline { color: var(--positive); }
+.loss .headline { color: var(--negative); }
+.push .headline { color: var(--accent); }
+
+.loss {
+  animation: pop-in var(--duration-base) var(--ease-spring), shake 420ms var(--ease-out) 120ms;
+}
+
+.detail {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: center;
+  max-width: 34ch;
+}
+
+.points {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--positive);
+}
+
+/* ── The run-ending round ───────────────────────────────────────────────── */
+
+/* Taller, because the reason sits between the result and the way out. */
+.final {
+  gap: var(--space-4);
+}
+
+.ending {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 40ch;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--negative) 45%, transparent);
+  background: color-mix(in srgb, var(--negative) 10%, transparent);
+  animation: pop-in var(--duration-base) var(--ease-spring) 220ms both;
+}
+
+.endingTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--negative);
+}
+
+.endingDetail {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: 1.5;
+}

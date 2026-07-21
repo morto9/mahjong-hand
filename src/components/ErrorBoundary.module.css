@@ -1,0 +1,79 @@
+.screen {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-panel-strong);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.glyph {
+  font-size: 2.5rem;
+  line-height: 1;
+  font-variant-emoji: text;
+  color: var(--text-faint);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--text-strong);
+}
+
+.body {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.details {
+  margin-top: var(--space-2);
+  text-align: left;
+}
+
+.summary {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.summary:hover {
+  color: var(--text-muted);
+}
+
+.message {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 180px;
+}

@@ -1,0 +1,185 @@
+import { useMemo } from 'react';
+
+import { Tile } from '@/components/tile/Tile';
+import { Button } from '@/components/ui/Button';
+import { Panel } from '@/components/ui/Panel';
+import type { GameConfig } from '@/domain/config';
+import { getTileType } from '@/domain/tiles';
+import type { Tile as TileModel } from '@/domain/types';
+import { createValueTable } from '@/domain/values';
+import { cx } from '@/lib/cx';
+import type { LeaderboardEntry } from '@/services/leaderboard';
+import { useGame } from '@/state/GameProvider';
+import styles from './LandingScreen.module.css';
+
+interface LandingScreenProps {
+  entries: readonly LeaderboardEntry[];
+  onNewGame: () => void;
+  /** Present when a run from a previous visit is waiting to be picked up. */
+  onResume?: () => void;
+  resumeSummary?: { round: number; score: number };
+}
+
+/** Decorative hand shown behind the hero — a nod at what the game is played with. */
+const SHOWCASE_TYPE_IDS = ['dragon-red', 'bamboo-7', 'wind-east', 'dot-3'];
+
+/**
+ * Rule bullets, generated from the live config so the copy can never drift from
+ * the rules actually in force. Glyphs come from the tile registry.
+ */
+function buildRules(config: GameConfig): { typeId: string; body: JSX.Element }[] {
+  return [
+    {
+      typeId: 'dot-1',
+      body: (
+        <span>
+          <strong>Number tiles</strong> are worth their face value, one through nine.
+        </span>
+      ),
+    },
+    {
+      typeId: 'dragon-red',
+      body: (
+        <span>
+          <strong>Dragons and winds</strong> start at {config.baseHonorValue}, rise by one in a
+          winning hand and fall by one in a losing one.
+        </span>
+      ),
+    },
+    {
+      typeId: 'wind-east',
+      body: (
+        <span>
+          <strong>The run ends</strong> if any honour hits {config.valueFloor} or{' '}
+          {config.valueCeiling}, or when the wall is rebuilt for the {config.maxReshuffles}
+          {ordinalSuffix(config.maxReshuffles)} time.
+        </span>
+      ),
+    },
+    {
+      typeId: 'bamboo-1',
+      body: (
+        <span>
+          <strong>Correct calls</strong> score {config.scoreBase} × your streak, up to{' '}
+          {config.streakCap}×. Ties are a push.
+        </span>
+      ),
+    },
+  ];
+}
+
+function ordinalSuffix(n: number): string {
+  const v = n % 100;
+  if (v >= 11 && v <= 13) return 'th';
+  return ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
+}
+
+export function LandingScreen({
+  entries,
+  onNewGame,
+  onResume,
+  resumeSummary,
+}: LandingScreenProps) {
+  const { config } = useGame();
+  const rules = useMemo(() => buildRules(config), [config]);
+
+  const showcase = useMemo<TileModel[]>(
+    () =>
+      SHOWCASE_TYPE_IDS.map((id, index) => ({
+        instanceId: `showcase-${index}`,
+        type: getTileType(id),
+      })),
+    [],
+  );
+  const showcaseValues = useMemo(() => createValueTable(config), [config]);
+
+  return (
+    <main className={styles.screen}>
+      <div className={styles.inner}>
+        <section className={styles.hero}>
+          <span className={styles.kicker}>Mahjong · Hand betting</span>
+
+          <h1 className={styles.title}>
+            Read the wall.
+            <br />
+            Call it <em>higher or lower</em>.
+          </h1>
+
+          <p className={styles.lede}>
+            Three tiles are dealt. Bet whether the next hand totals more or less. Numbers are worth
+            their face — but dragons and winds shift with every hand they touch, and a tile that
+            drifts too far ends the night.
+          </p>
+
+          <div className={styles.fan} aria-hidden="true">
+            {showcase.map((tile, index) => (
+              <Tile key={tile.instanceId} tile={tile} values={showcaseValues} size="md" index={index} />
+            ))}
+          </div>
+
+          <div className={styles.actions}>
+            {onResume ? (
+              <>
+                <Button variant="primary" size="lg" onClick={onResume} autoFocus>
+                  Resume run
+                </Button>
+                <Button size="lg" onClick={onNewGame}>
+                  New game
+                </Button>
+              </>
+            ) : (
+              <Button variant="primary" size="lg" onClick={onNewGame} autoFocus>
+                New game
+              </Button>
+            )}
+          </div>
+
+          {resumeSummary && (
+            <p className={styles.resumeNote}>
+              Hand {resumeSummary.round} · {resumeSummary.score} points on the table. Starting a new
+              game discards it.
+            </p>
+          )}
+        </section>
+
+        <aside className={styles.side}>
+          <Panel title="Top 5" raised>
+            {entries.length === 0 ? (
+              <p className={styles.emptyBoard}>
+                No runs recorded yet. The first hand you survive sets the mark.
+              </p>
+            ) : (
+              <ol className={styles.board}>
+                {entries.map((entry, index) => (
+                  <li key={entry.id} className={cx(styles.entry, index === 0 && styles.first)}>
+                    <span className={styles.rank}>{index + 1}</span>
+                    <span className={styles.who}>
+                      <span className={styles.name}>{entry.name}</span>
+                      <span className={styles.meta}>
+                        {entry.rounds} hands · best streak {entry.bestStreak}
+                      </span>
+                    </span>
+                    <span className={styles.score}>{entry.score}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </Panel>
+
+          <Panel title="How it plays">
+            <div className={styles.rules}>
+              {rules.map(({ typeId, body }) => (
+                <p key={typeId} className={styles.rule}>
+                  <span className={styles.ruleGlyph} aria-hidden="true">
+                    {getTileType(typeId).glyph}
+                  </span>
+                  {body}
+                </p>
+              ))}
+            </div>
+          </Panel>
+        </aside>
+      </div>
+    </main>
+  );
+}

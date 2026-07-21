@@ -1,0 +1,97 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.buttons {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.bet {
+  --bet-tint: var(--text);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 148px;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-panel-strong);
+  color: var(--bet-tint);
+  overflow: hidden;
+  transition:
+    transform var(--duration-fast) var(--ease-spring),
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.higher { --bet-tint: var(--positive); }
+.lower { --bet-tint: var(--negative); }
+
+.bet:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--bet-tint);
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--bet-tint) 70%, transparent);
+}
+
+.bet:active:not(:disabled) {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.bet:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* The locked-in choice stays lit while the tiles flip. */
+.chosen {
+  border-color: var(--bet-tint);
+  background: color-mix(in srgb, var(--bet-tint) 16%, transparent);
+  opacity: 1 !important;
+}
+
+.arrow {
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+
+.word {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+
+.prompt {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: center;
+  min-height: 1.5em;
+}
+
+@media (max-width: 560px) {
+  .buttons {
+    width: 100%;
+  }
+
+  .bet {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-4) var(--space-3);
+  }
+}

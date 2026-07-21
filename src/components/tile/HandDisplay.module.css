@@ -1,0 +1,88 @@
+.hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.tiles {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.total {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.hidden .total {
+  color: var(--text-faint);
+}
+
+/* Slot held open before a bet is placed — present, but clearly not in play. */
+.awaiting .label,
+.awaiting .total {
+  color: var(--text-faint);
+  opacity: 0.55;
+}
+
+/**
+ * The revealed hand being promoted into the current-hand slot. It travels from
+ * where it was standing rather than popping into existence, so the eye follows
+ * it across instead of re-reading the board.
+ */
+.slideIn {
+  animation: promote-in var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes promote-in {
+  from {
+    opacity: 0.4;
+    transform: translateX(28%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.win .total { color: var(--positive); }
+.loss .total { color: var(--negative); }
+.push .total { color: var(--accent); }
+
+/* The revealed hand pops in when its total lands. */
+.revealed .total {
+  animation: pop-in var(--duration-base) var(--ease-spring);
+}
+
+@media (max-width: 560px) {
+  .tiles {
+    gap: var(--space-2);
+  }
+
+  .total {
+    font-size: var(--text-2xl);
+  }
+}

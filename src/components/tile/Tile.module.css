@@ -1,0 +1,176 @@
+/**
+ * The tile itself: an ivory face with a bevelled rim, a suit-tinted glyph, a
+ * value pip, and a jade back for the face-down state. Sizes are driven by a
+ * single `--tile-w` variable so every element scales together.
+ */
+
+.scene {
+  perspective: 900px;
+  flex: none;
+}
+
+.tile {
+  --tile-w: 76px;
+  --tile-h: calc(var(--tile-w) * 1.4);
+  --tile-radius: calc(var(--tile-w) * 0.14);
+
+  position: relative;
+  width: var(--tile-w);
+  height: var(--tile-h);
+  transform-style: preserve-3d;
+  transition: transform var(--duration-reveal) var(--ease-out);
+}
+
+/* ── Sizes ──────────────────────────────────────────────────────────────── */
+.sm .tile,
+.tile.sm {
+  --tile-w: 34px;
+}
+
+.md .tile,
+.tile.md {
+  --tile-w: 56px;
+}
+
+.lg .tile,
+.tile.lg {
+  --tile-w: 84px;
+}
+
+/* ── Faces ──────────────────────────────────────────────────────────────── */
+.face,
+.back {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--tile-radius);
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.face {
+  background: linear-gradient(170deg, var(--tile-face-top) 0%, var(--tile-face-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 3px rgba(120, 100, 66, 0.25),
+    inset 2px 0 3px rgba(255, 255, 255, 0.55),
+    var(--shadow-tile);
+}
+
+/* The engraved inner rim of a real tile face. */
+.face::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--tile-w) * 0.055);
+  border-radius: calc(var(--tile-radius) * 0.7);
+  border: 1px solid rgba(140, 118, 80, 0.22);
+  pointer-events: none;
+}
+
+.back {
+  transform: rotateY(180deg);
+  background:
+    linear-gradient(160deg, var(--tile-back-top), var(--tile-back-bottom)),
+    var(--tile-back-bottom);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35),
+    var(--shadow-tile);
+}
+
+/* Woven diagonal pattern on the tile back. */
+.back::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--tile-w) * 0.09);
+  border-radius: calc(var(--tile-radius) * 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.07) 0 3px,
+    transparent 3px 7px
+  );
+}
+
+/* ── Glyph ──────────────────────────────────────────────────────────────── */
+.glyph {
+  font-size: calc(var(--tile-w) * 0.86);
+  line-height: 1;
+  /* The Unicode mahjong glyphs sit high in their em box. */
+  margin-top: calc(var(--tile-w) * -0.06);
+  color: var(--glyph-color, var(--tile-ink));
+  /* Many systems render these glyphs as colour emoji; force the outline form
+     and re-tint it so the suit colours stay under our control. */
+  font-family: var(--font-body);
+  font-variant-emoji: text;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  user-select: none;
+}
+
+.bamboo { --glyph-color: var(--suit-bamboo); }
+.character { --glyph-color: var(--suit-character); }
+.dot { --glyph-color: var(--suit-dot); }
+.dragon { --glyph-color: var(--suit-dragon); }
+.wind { --glyph-color: var(--suit-wind); }
+
+/* ── Value pip ──────────────────────────────────────────────────────────── */
+.value {
+  position: absolute;
+  right: calc(var(--tile-w) * 0.07);
+  bottom: calc(var(--tile-w) * 0.06);
+  min-width: calc(var(--tile-w) * 0.3);
+  padding: 0 calc(var(--tile-w) * 0.06);
+  border-radius: var(--radius-pill);
+  background: rgba(35, 49, 44, 0.9);
+  color: var(--ivory-100);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: calc(var(--tile-w) * 0.2);
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: center;
+}
+
+/* Honour tiles whose value has drifted get a coloured pip. */
+.valueUp { background: var(--suit-bamboo); }
+.valueDown { background: var(--suit-dragon); }
+
+/* ── States ─────────────────────────────────────────────────────────────── */
+.faceDown .tile,
+.tile.faceDown {
+  transform: rotateY(180deg);
+}
+
+.dealt {
+  animation: deal-in var(--duration-slow) var(--ease-out) both;
+}
+
+/* The empty slot holder reads as a tile that is waiting, not one in play. */
+.placeholder {
+  opacity: 0.34;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-reveal) var(--ease-out);
+}
+
+/**
+ * Lift on hover — only for tiles in the live hands. Opting in per tile, rather
+ * than a blanket `.scene:hover`, which also caught the 34px history minis and
+ * the decorative fan on the landing page.
+ */
+.scene.hoverable:hover .tile:not(.faceDown) {
+  transform: translateY(-3px) rotateX(4deg);
+}
+
+/**
+ * An honour one step from ending the run. Drawn on the face so the warning is
+ * where the player is already looking, not only in the side rail.
+ */
+.atRisk .face {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 3px rgba(120, 100, 66, 0.25),
+    0 0 0 2px var(--negative),
+    var(--shadow-tile);
+}

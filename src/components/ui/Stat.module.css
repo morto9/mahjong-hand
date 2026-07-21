@@ -1,0 +1,46 @@
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-strong);
+  line-height: 1.1;
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.lg .value {
+  font-size: var(--text-2xl);
+}
+
+.accent .value {
+  color: var(--accent);
+}
+
+.positive .value {
+  color: var(--positive);
+}
+
+.negative .value {
+  color: var(--negative);
+}
+
+/* Brief flash when the underlying number changes. */
+.bump {
+  animation: pop-in var(--duration-base) var(--ease-spring);
+}

@@ -1,0 +1,103 @@
+.button {
+  --button-bg: var(--bg-panel-strong);
+  --button-fg: var(--text);
+  --button-border: var(--border);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--button-fg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* A light sheen that sweeps across on hover — used sparingly, on primary only. */
+.button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.22) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.primary:hover:not(:disabled)::after {
+  opacity: 1;
+  animation: sweep 900ms var(--ease-out);
+}
+
+/* ── Variants ───────────────────────────────────────────────────────────── */
+.primary {
+  --button-bg: linear-gradient(180deg, var(--gold-soft), var(--gold));
+  --button-fg: #23180a;
+  --button-border: transparent;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+.primary:hover:not(:disabled) {
+  box-shadow: var(--glow-gold), var(--shadow-lg);
+}
+
+.ghost {
+  --button-bg: transparent;
+  --button-border: transparent;
+  color: var(--text-muted);
+}
+
+.ghost:hover:not(:disabled) {
+  color: var(--text-strong);
+  background: var(--bg-panel);
+  box-shadow: none;
+}
+
+.danger {
+  --button-fg: var(--negative);
+  --button-border: color-mix(in srgb, var(--negative) 40%, transparent);
+}
+
+/* ── Sizes ──────────────────────────────────────────────────────────────── */
+.sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+}
+
+.lg {
+  padding: var(--space-4) var(--space-7);
+  font-size: var(--text-lg);
+}
+
+.block {
+  width: 100%;
+}

@@ -1,0 +1,64 @@
+.deck {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.piles {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.meter {
+  position: relative;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-panel-strong);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--jade), var(--jade-soft));
+  transition: width var(--duration-slow) var(--ease-out), background var(--duration-base);
+}
+
+.low .fill {
+  background: linear-gradient(90deg, var(--cinnabar), var(--gold));
+}
+
+.reshuffles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pips {
+  display: flex;
+  gap: 5px;
+}
+
+.pip {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.pipUsed {
+  background: var(--negative);
+  border-color: var(--negative);
+}
+
+.note {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+.warning {
+  color: var(--accent);
+}

@@ -1,0 +1,217 @@
+.screen {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--shell-max);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--space-7);
+  align-items: center;
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: rise-in var(--duration-slow) var(--ease-out) both;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.title {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.lede {
+  font-size: var(--text-lg);
+  color: var(--text-muted);
+  max-width: 46ch;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.resumeNote {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  letter-spacing: 0.02em;
+}
+
+/* Decorative fan of tiles behind the hero copy. */
+.fan {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.fan > * {
+  animation: deal-in var(--duration-slow) var(--ease-out) both;
+}
+
+.fan > *:nth-child(1) { animation-delay: 120ms; transform: rotate(-6deg); }
+.fan > *:nth-child(2) { animation-delay: 190ms; transform: translateY(-6px); }
+.fan > *:nth-child(3) { animation-delay: 260ms; transform: rotate(5deg); }
+.fan > *:nth-child(4) { animation-delay: 330ms; transform: translateY(-4px) rotate(9deg); }
+
+/* ── Side column ────────────────────────────────────────────────────────── */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  animation: rise-in var(--duration-slow) var(--ease-out) 120ms both;
+}
+
+/* ── Leaderboard ────────────────────────────────────────────────────────── */
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.entry:hover {
+  background: var(--bg-panel);
+}
+
+.rank {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
+
+.first .rank,
+.first .score {
+  color: var(--accent);
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-size: var(--text-sm);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.score {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.emptyBoard {
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+  font-style: italic;
+  padding: var(--space-3) var(--space-1);
+  line-height: 1.6;
+}
+
+/* ── Rules ──────────────────────────────────────────────────────────────── */
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.ruleGlyph {
+  font-size: 1.2rem;
+  line-height: 1.2;
+  font-variant-emoji: text;
+  color: var(--accent);
+}
+
+.rule strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.footer {
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 560px) {
+  .screen {
+    padding: var(--space-5) var(--space-3) var(--space-7);
+  }
+
+  .actions {
+    width: 100%;
+  }
+}
