@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Tile } from '@/components/tile/Tile';
 import { Button } from '@/components/ui/Button';
 import { Panel } from '@/components/ui/Panel';
+import { SettingsMenu } from '@/components/ui/SettingsMenu';
 import type { GameConfig } from '@/domain/config';
 import { getTileType } from '@/domain/tiles';
 import type { Tile as TileModel } from '@/domain/types';
@@ -33,7 +34,7 @@ function buildRules(config: GameConfig): { typeId: string; body: JSX.Element }[]
       typeId: 'dot-1',
       body: (
         <span>
-          <strong>Number tiles</strong> are worth their face value, one through nine.
+          <strong>Number tiles</strong> are worth their face value, 1 to 9.
         </span>
       ),
     },
@@ -41,8 +42,8 @@ function buildRules(config: GameConfig): { typeId: string; body: JSX.Element }[]
       typeId: 'dragon-red',
       body: (
         <span>
-          <strong>Dragons and winds</strong> start at {config.baseHonorValue}, rise by one in a
-          winning hand and fall by one in a losing one.
+          <strong>Dragons and winds</strong> start at {config.baseHonorValue}, rise by 1 in a
+          winning hand and fall by 1 in a losing one.
         </span>
       ),
     },
@@ -74,12 +75,9 @@ function ordinalSuffix(n: number): string {
   return ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
 }
 
-export function LandingScreen({
-  entries,
-  onNewGame,
-  onResume,
-  resumeSummary,
-}: LandingScreenProps) {
+// `resumeSummary` is still accepted, and still passed, but the note that
+// rendered it is currently commented out below.
+export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenProps) {
   const { config } = useGame();
   const rules = useMemo(() => buildRules(config), [config]);
 
@@ -97,7 +95,7 @@ export function LandingScreen({
     <main className={styles.screen}>
       <div className={styles.inner}>
         <section className={styles.hero}>
-          <span className={styles.kicker}>Mahjong · Hand betting</span>
+          {/* <span className={styles.kicker}>Mahjong · Hand betting</span> */}
 
           <h1 className={styles.title}>
             Read the wall.
@@ -107,9 +105,8 @@ export function LandingScreen({
           </h1>
 
           <p className={styles.lede}>
-            Three tiles are dealt. Bet whether the next hand totals more or less. Numbers are worth
-            their face — but dragons and winds shift with every hand they touch, and a tile that
-            drifts too far ends the night.
+            Three tiles are dealt, bet whether the next hand totals more or less. <br/>Numbers of dragons and winds shift with every hand they touch,<br/>any tile that
+            drifts too far ends the night. <br/><strong>Can you make it to the top 5 ?</strong>
           </p>
 
           <div className={styles.fan} aria-hidden="true">
@@ -129,7 +126,7 @@ export function LandingScreen({
             {onResume ? (
               <>
                 <Button variant="primary" size="lg" onClick={onResume} autoFocus>
-                  Resume run
+                  Resume
                 </Button>
                 <Button size="lg" onClick={onNewGame}>
                   New game
@@ -140,14 +137,21 @@ export function LandingScreen({
                 New game
               </Button>
             )}
+
+            {/*
+              Sits with the actions rather than in a corner: this screen has a
+              row to belong to, and settings is one of the things you come here
+              to do. No exit — there is no run on the table to leave.
+            */}
+            <SettingsMenu />
           </div>
 
-          {resumeSummary && (
+          {/* {resumeSummary && (
             <p className={styles.resumeNote}>
               Hand {resumeSummary.round} · {resumeSummary.score} points on the table. Starting a new
               game discards it.
             </p>
-          )}
+          )} */}
         </section>
 
         <aside className={styles.side}>

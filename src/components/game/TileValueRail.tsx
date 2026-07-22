@@ -1,6 +1,5 @@
 import { Panel } from '@/components/ui/Panel';
 import { cx } from '@/lib/cx';
-import { useGame } from '@/state/GameProvider';
 import { useHonorValues } from '@/state/useGameSelectors';
 import styles from './TileValueRail.module.css';
 
@@ -11,7 +10,6 @@ import styles from './TileValueRail.module.css';
  * fixed, so all the drift, and both loss conditions tied to it, live here.
  */
 export function TileValueRail() {
-  const { config } = useGame();
   const honors = useHonorValues();
 
   return (
@@ -51,10 +49,10 @@ export function TileValueRail() {
           </li>
         ))}
       </ul>
-      <p className={styles.legend}>
+      {/* <p className={styles.legend}>
         Honours start at {config.baseHonorValue}, gain 1 in a winning hand and lose 1 in a losing
         one. Reaching {config.valueFloor} or {config.valueCeiling} ends the run.
-      </p>
+      </p> */}
     </Panel>
   );
 }

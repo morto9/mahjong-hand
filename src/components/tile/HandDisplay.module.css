@@ -7,7 +7,7 @@
 
 .tiles {
   display: flex;
-  gap: var(--space-3);
+  gap: 2.5rem;
   justify-content: center;
   flex-wrap: wrap;
 }

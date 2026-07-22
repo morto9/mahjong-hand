@@ -15,7 +15,7 @@ export function RunStats() {
   return (
     <Panel title="This run" className={styles.stats}>
       <div className={styles.score}>
-        <Stat label="Score" value={state.score} size="lg" tone="accent" countUp />
+        <Stat label="Score" value={state.score} size="lg" tone="accent" countUp align='center'/>
       </div>
 
       <div className={styles.counters}>

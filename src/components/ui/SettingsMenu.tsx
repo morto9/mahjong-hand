@@ -167,7 +167,7 @@ export function SettingsMenu({ onExitGame, className }: SettingsMenuProps) {
               <span className={styles.icon} aria-hidden="true">
                 {THEME_ICON[preference]}
               </span>
-              Dark mode
+              Mode
               <span className={styles.state}>{THEME_LABEL[preference]}</span>
             </button>
 

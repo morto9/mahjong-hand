@@ -27,7 +27,7 @@ describe('SettingsMenu', () => {
 
     expect(isOpen()).toBe(true);
     expect(screen.getByRole('button', { name: /sound/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /dark mode/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /mode/i })).toBeInTheDocument();
   });
 
   it('opens on click, for touch and keyboard', async () => {
@@ -70,7 +70,7 @@ describe('SettingsMenu', () => {
     render(<SettingsMenu />);
     await user.click(trigger());
 
-    const theme = () => screen.getByRole('button', { name: /dark mode/i });
+    const theme = () => screen.getByRole('button', { name: /mode/i });
     expect(theme()).toHaveTextContent(/auto/i);
 
     await user.click(theme());

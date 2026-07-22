@@ -34,7 +34,7 @@ describe('the landing page', () => {
     render(<App />);
 
     expect(screen.getByRole('button', { name: /new game/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /resume run/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /resume/i })).not.toBeInTheDocument();
   });
 
   it('says so when no scores have been recorded', () => {
@@ -81,14 +81,11 @@ describe('the landing page', () => {
 });
 
 describe('resuming a saved run', () => {
-  it('offers the run and summarises where it stands', () => {
-    const saved = seedSavedRun();
+  it('offers the run', () => {
+    seedSavedRun();
     render(<App />);
 
-    expect(screen.getByRole('button', { name: /resume run/i })).toBeInTheDocument();
-    expect(
-      screen.getByText(new RegExp(`hand ${saved.round}.*${saved.score} points`, 'i')),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /resume/i })).toBeInTheDocument();
   });
 
   it('restores the run exactly where it was left', async () => {
@@ -96,7 +93,7 @@ describe('resuming a saved run', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /resume run/i }));
+    await user.click(screen.getByRole('button', { name: /resume/i }));
 
     expect(statValue('Hand')).toBe(String(saved.round));
     expect(statValue('Score')).toBe(String(saved.score));
@@ -109,7 +106,7 @@ describe('resuming a saved run', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /resume run/i }));
+    await user.click(screen.getByRole('button', { name: /resume/i }));
 
     const rail = screen.getByText('Honour values').closest('section') as HTMLElement;
     expect(
@@ -137,6 +134,6 @@ describe('resuming a saved run', () => {
     await user.click(screen.getByRole('button', { name: /settings/i }));
     await user.click(screen.getByRole('button', { name: /exit game/i }));
 
-    expect(screen.getByRole('button', { name: /resume run/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /resume/i })).toBeInTheDocument();
   });
 });

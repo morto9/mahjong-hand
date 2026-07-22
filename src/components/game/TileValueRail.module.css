@@ -1,7 +1,7 @@
 .rail {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 1.5rem;
   flex: 1;
   min-height: 0;
   overflow-y: auto;

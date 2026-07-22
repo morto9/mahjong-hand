@@ -96,13 +96,19 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
 
   return (
     <div className={styles.app}>
-      {/* Exit only appears while there is a run to leave. */}
-      <div className={styles.settingsAnchor}>
-        <SettingsMenu
-          className={styles.settings}
-          onExitGame={screen === 'game' ? exitGame : undefined}
-        />
-      </div>
+      {/*
+        Corner placement for the screens that are a board — the landing page has
+        a row of actions to sit in instead, and renders its own.
+        Exit only appears while there is a run to leave.
+      */}
+      {screen !== 'landing' && (
+        <div className={styles.settingsAnchor}>
+          <SettingsMenu
+            className={styles.settings}
+            onExitGame={screen === 'game' ? exitGame : undefined}
+          />
+        </div>
+      )}
 
       {/* Keyed by screen so each entrance animation replays on navigation. */}
       <div key={screen} className={styles.screen}>
