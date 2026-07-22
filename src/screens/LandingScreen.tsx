@@ -96,37 +96,37 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
 
   return (
     <main className={styles.screen}>
-      <header className={styles.masthead}>
-        {/*
-          The logo carries the game's name, so it *is* the h1 — the alt text is
-          what a screen reader and a failed image both fall back to.
-
-          Intrinsic width/height are given so the browser reserves the box before
-          the image loads: this page is fitted to the viewport, and a late-arriving
-          masthead would otherwise shove everything below it down on load.
-        */}
-        <h1 className={styles.gameTitle}>
-          <img
-            className={styles.logo}
-            src="/logo.png"
-            width={320}
-            height={320}
-            alt="Mahjong Hands — Betting Game"
-          />
-        </h1>
-      </header>
-
       <div className={styles.inner}>
         <section className={styles.hero}>
-          {/* <span className={styles.kicker}>Mahjong · Hand betting</span> */}
+          {/*
+            The logo and the pitch share a row: logo on the left, heading on the
+            right. They are siblings, not nested — the logo is the page's h1 (its
+            alt carries the name), the pitch is the h2, and an h1 may not live
+            inside an h2.
 
-          {/* The game's name is the page's h1 above; this is the pitch under it. */}
-          <h2 className={styles.title}>
-            Read the wall.
-            <br />
-            Call it.<br />
-            <em>higher or lower ?</em>
-          </h2>
+            Intrinsic width/height on the image reserve its box before it loads,
+            so a late-arriving logo cannot shove the page down on this fitted
+            screen.
+          */}
+          <div className={styles.headingRow}>
+            <h1 className={styles.gameTitle}>
+              <img
+                className={styles.logo}
+                src="/logo.png"
+                width={320}
+                height={320}
+                alt="Mahjong Hands — Betting Game"
+              />
+            </h1>
+
+            <h2 className={styles.title}>
+              Read the wall.
+              <br />
+              Call it.
+              <br />
+              <em>higher or lower ?</em>
+            </h2>
+          </div>
 
           <p className={styles.lede}>
             Three tiles are dealt, bet whether the next hand totals more or less. <br/>Numbers of dragons and winds shift with every hand they touch,<br/>any tile that
