@@ -53,6 +53,10 @@
 /* ── Table ──────────────────────────────────────────────────────────────── */
 .table {
   grid-area: table;
+  /* Lets the hand tiles size themselves against the table rather than the
+     window — see `--tile-w` in Tile.module.css. Safe here because the table's
+     width comes from the grid column, not from its contents. */
+  container-type: inline-size;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -215,7 +219,16 @@
     min-height: 0;
   }
 
+  /**
+   * The two hands stack on a phone.
+   *
+   * Side by side, each gets about 140px — not enough for three tiles at any size
+   * that stays legible, so the hand would break onto two rows and stop reading as
+   * a hand at all. Stacked, each gets the full width and the comparison runs top
+   * to bottom instead of left to right.
+   */
   .hands {
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
   }
 
