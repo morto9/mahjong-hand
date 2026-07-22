@@ -64,6 +64,7 @@ export function GameScreen() {
               baseValue={config.baseHonorValue}
               atRiskTypes={atRiskTypes}
               entrance="deal"
+              mirrored
             />
           </div>
 

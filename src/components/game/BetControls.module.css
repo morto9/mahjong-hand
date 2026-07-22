@@ -78,7 +78,7 @@
 }
 
 .prompt {
-  font-size: var(--text-sm);
+  font-size: 1.2rem;
   color: var(--text-muted);
   text-align: center;
   min-height: 1.5em;

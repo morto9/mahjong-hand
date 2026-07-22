@@ -32,7 +32,7 @@ export const tileValueExtremeRule: GameOverRule = ({ values, config }) => {
   return {
     rule: 'tile-value-extreme',
     title: 'Tile out of balance',
-    detail: `The ${label} ${direction} at ${first.value}. A tile that reaches ${config.valueFloor} or ${config.valueCeiling} ends the run.`,
+    detail: `The ${label} ${direction} at ${first.value}.`,
   };
 };
 

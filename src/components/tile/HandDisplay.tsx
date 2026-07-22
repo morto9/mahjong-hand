@@ -27,6 +27,14 @@ interface HandDisplayProps {
   entrance?: HandEntrance;
   /** Honour types one step from ending the run; ringed on the tile face. */
   atRiskTypes?: ReadonlySet<TileTypeId>;
+  /**
+   * Flips the hand vertically — total, then label, then tiles.
+   *
+   * Used for the lower of the two hands so the pair mirrors across the `vs`
+   * between them, the way two players face each other across a table, instead
+   * of repeating the same top-down order twice.
+   */
+  mirrored?: boolean;
 }
 
 /** A hand on the table: its tiles plus the total they were worth when dealt. */
@@ -41,6 +49,7 @@ export function HandDisplay({
   baseValue,
   entrance = 'none',
   atRiskTypes,
+  mirrored = false,
 }: HandDisplayProps) {
   const resolved = !hidden && outcome;
 
@@ -53,6 +62,7 @@ export function HandDisplay({
         resolved && styles.revealed,
         resolved && styles[outcome],
         entrance === 'slide' && styles.slideIn,
+        mirrored && styles.mirrored,
       )}
     >
       <div className={styles.tiles}>
