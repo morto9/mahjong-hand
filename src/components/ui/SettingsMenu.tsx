@@ -19,6 +19,11 @@ interface SettingsMenuProps {
   onExitGame?: () => void;
   /** Matches the trigger to the buttons it sits with. Corner placement stays small. */
   size?: ButtonSize;
+  /**
+   * Which way the menu would rather open. Honoured only where it fits — the
+   * measurement below still has the final say, so this cannot push it off screen.
+   */
+  placement?: 'above' | 'below';
   className?: string;
 }
 
@@ -41,10 +46,15 @@ const THEME_ICON: Record<ThemePreference, string> = {
  * also opens on click and on focus entering the group, and closes on Escape or
  * a click elsewhere.
  */
-export function SettingsMenu({ onExitGame, size = 'sm', className }: SettingsMenuProps) {
+export function SettingsMenu({
+  onExitGame,
+  size = 'sm',
+  placement = 'below',
+  className,
+}: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
-  /** True when there is not enough room below, so the menu opens upward. */
-  const [dropUp, setDropUp] = useState(false);
+  /** True when the menu is opening upward — see the measurement below. */
+  const [dropUp, setDropUp] = useState(placement === 'above');
   const wrapper = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -79,12 +89,15 @@ export function SettingsMenu({ onExitGame, size = 'sm', className }: SettingsMen
   );
 
   /**
-   * Decides which way to open, measured rather than assumed.
+   * Decides which way to open: the caller's preference where it fits, measured
+   * rather than assumed.
    *
-   * The control is placed differently per breakpoint — tucked into a panel's top
-   * corner on a wide screen, pinned to the bottom corner once the columns stack.
-   * Rather than have this component encode where it has been put, it looks at
-   * the room actually below it and flips up when there is not enough.
+   * The control is placed differently per screen — tucked into a panel's top
+   * corner on the board, in a row of buttons on the landing page, pinned to the
+   * bottom corner once the columns stack. A caller can say which way it would
+   * rather open, but never gets to force the menu off the screen: the preferred
+   * side is used only if the menu actually fits there, otherwise the other side,
+   * and if neither fits, whichever has more room.
    */
   useLayoutEffect(() => {
     if (!open) return;
@@ -93,8 +106,19 @@ export function SettingsMenu({ onExitGame, size = 'sm', className }: SettingsMen
       const trigger = wrapper.current;
       const menu = panel.current;
       if (!trigger || !menu) return;
-      const roomBelow = window.innerHeight - trigger.getBoundingClientRect().bottom;
-      setDropUp(menu.offsetHeight > roomBelow);
+
+      const { top, bottom } = trigger.getBoundingClientRect();
+      const needed = menu.offsetHeight;
+      const roomAbove = top;
+      const roomBelow = window.innerHeight - bottom;
+      const fitsAbove = needed <= roomAbove;
+      const fitsBelow = needed <= roomBelow;
+
+      setDropUp(
+        placement === 'above'
+          ? fitsAbove || (!fitsBelow && roomAbove > roomBelow)
+          : !fitsBelow && (fitsAbove || roomAbove > roomBelow),
+      );
     };
 
     measure();
@@ -103,7 +127,7 @@ export function SettingsMenu({ onExitGame, size = 'sm', className }: SettingsMen
     // with and can end up hanging off the top of the window.
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
-  }, [open, onExitGame]);
+  }, [open, onExitGame, placement]);
 
   useEffect(() => {
     if (!open) return;

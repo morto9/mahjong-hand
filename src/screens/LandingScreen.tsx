@@ -154,7 +154,7 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
               row to belong to, and settings is one of the things you come here
               to do. No exit — there is no run on the table to leave.
             */}
-            <SettingsMenu size="lg" />
+            <SettingsMenu size="lg" placement="above" />
           </div>
 
           {/* {resumeSummary && (

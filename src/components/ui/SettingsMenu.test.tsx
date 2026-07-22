@@ -30,6 +30,64 @@ describe('SettingsMenu', () => {
     expect(screen.getByRole('button', { name: /mode/i })).toBeInTheDocument();
   });
 
+  /**
+   * Read from the modifier class, not computed style: stylesheets are not loaded
+   * in this environment, so every position resolves to `auto` regardless.
+   */
+  const opensUpward = () => {
+    const panel = screen.getByRole('group', { name: /settings/i }).parentElement!;
+    return /dropUp/.test(panel.className);
+  };
+
+  describe('which way it opens', () => {
+    it('drops below by default', async () => {
+      const user = userEvent.setup();
+      render(<SettingsMenu />);
+
+      await user.hover(trigger());
+
+      expect(opensUpward()).toBe(false);
+    });
+
+    it('opens upward when asked to, given the room', async () => {
+      const user = userEvent.setup();
+      render(<SettingsMenu placement="above" />);
+
+      await user.hover(trigger());
+
+      expect(opensUpward()).toBe(true);
+    });
+
+    /**
+     * The preference must not be able to push the menu off the top of the
+     * window: at the very top of the page there is no room above it at all.
+     */
+    it('ignores the preference when there is no room for it', async () => {
+      const user = userEvent.setup();
+      // jsdom lays nothing out, so the menu measures as zero-height and would
+      // "fit" anywhere. Give it a real one for the comparison to mean something.
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(180);
+      render(<SettingsMenu placement="above" />);
+      const wrapper = trigger().parentElement!;
+      // Pin the trigger to the top edge, leaving nothing above it.
+      vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({
+        top: 0,
+        bottom: 40,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 40,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect);
+
+      await user.hover(trigger());
+
+      expect(opensUpward()).toBe(false);
+    });
+  });
+
   it('opens on click, for touch and keyboard', async () => {
     const user = userEvent.setup();
     render(<SettingsMenu />);
