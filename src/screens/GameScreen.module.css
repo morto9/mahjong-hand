@@ -61,6 +61,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /**
+   * Hands and action area sit together as one group, centred in the felt.
+   *
+   * The table stretches to match the side columns, so it is usually far taller
+   * than its contents. Anchoring the two ends apart left a void down the middle;
+   * centring turns the same leftover space into balanced margin around a compact
+   * composition.
+   *
+   * `safe` so that when the content *is* taller than the table — a run-ending
+   * panel on a short screen — it overflows downward and stays scrollable, rather
+   * than centring the top edge out of reach.
+   */
+  justify-content: center;
+  justify-content: safe center;
   gap: var(--space-5);
   padding: var(--space-5);
   min-height: 0;
@@ -136,8 +150,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Reserved so the board does not jump when the result replaces the controls. */
   min-height: 196px;
-  margin-top: auto;
 }
 
 .stageSwap {
