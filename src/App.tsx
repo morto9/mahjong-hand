@@ -97,10 +97,12 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
   return (
     <div className={styles.app}>
       {/* Exit only appears while there is a run to leave. */}
-      <SettingsMenu
-        className={styles.settings}
-        onExitGame={screen === 'game' ? exitGame : undefined}
-      />
+      <div className={styles.settingsAnchor}>
+        <SettingsMenu
+          className={styles.settings}
+          onExitGame={screen === 'game' ? exitGame : undefined}
+        />
+      </div>
 
       {/* Keyed by screen so each entrance animation replays on navigation. */}
       <div key={screen} className={styles.screen}>

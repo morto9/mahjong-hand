@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type FocusEvent as ReactFocusEvent,
@@ -40,7 +41,10 @@ const THEME_ICON: Record<ThemePreference, string> = {
  */
 export function SettingsMenu({ onExitGame, className }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
+  /** True when there is not enough room below, so the menu opens upward. */
+  const [dropUp, setDropUp] = useState(false);
   const wrapper = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
 
   const { preference, cycleTheme } = useTheme();
   const { muted, toggleMuted } = useSound();
@@ -71,6 +75,33 @@ export function SettingsMenu({ onExitGame, className }: SettingsMenuProps) {
     },
     [close],
   );
+
+  /**
+   * Decides which way to open, measured rather than assumed.
+   *
+   * The control is placed differently per breakpoint — tucked into a panel's top
+   * corner on a wide screen, pinned to the bottom corner once the columns stack.
+   * Rather than have this component encode where it has been put, it looks at
+   * the room actually below it and flips up when there is not enough.
+   */
+  useLayoutEffect(() => {
+    if (!open) return;
+
+    const measure = () => {
+      const trigger = wrapper.current;
+      const menu = panel.current;
+      if (!trigger || !menu) return;
+      const roomBelow = window.innerHeight - trigger.getBoundingClientRect().bottom;
+      setDropUp(menu.offsetHeight > roomBelow);
+    };
+
+    measure();
+    // The control moves corners at a breakpoint, so a resize while the menu is
+    // open can invert the answer. Without this it keeps the direction it opened
+    // with and can end up hanging off the top of the window.
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [open, onExitGame]);
 
   useEffect(() => {
     if (!open) return;
@@ -122,7 +153,7 @@ export function SettingsMenu({ onExitGame, className }: SettingsMenuProps) {
       </Button>
 
       {open && (
-        <div className={styles.panel}>
+        <div ref={panel} className={cx(styles.panel, dropUp && styles.dropUp)}>
           <div className={styles.items} role="group" aria-label="Settings">
             <button type="button" className={styles.item} onClick={toggleMuted} aria-pressed={!muted}>
               <span className={styles.icon} aria-hidden="true">

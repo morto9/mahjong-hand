@@ -38,8 +38,6 @@
 
 .railRight {
   grid-area: right;
-  /* Clears the fixed settings control in the corner. */
-  padding-top: var(--space-6);
 }
 
 .rail {
@@ -222,10 +220,6 @@
       'table'
       'left'
       'right';
-  }
-
-  .railRight {
-    padding-top: 0;
   }
 
   .rail {

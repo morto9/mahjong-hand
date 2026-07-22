@@ -9,9 +9,46 @@
   animation: screen-in var(--duration-slow) var(--ease-out) both;
 }
 
-.settings {
+/**
+ * A full-height layer the width of the board, centred over it.
+ *
+ * The settings control hangs off this rather than off the viewport, so it lands
+ * on the board's own top-right corner at every width instead of drifting into
+ * the margin on a wide screen and colliding with the first panel on a narrow
+ * one. Transparent to the pointer so it never intercepts a click meant for the
+ * board beneath; the control itself opts back in.
+ */
+.settingsAnchor {
   position: fixed;
-  top: var(--space-4);
-  right: var(--space-4);
+  inset: 0;
+  max-width: var(--shell-max);
+  margin: 0 auto;
+  pointer-events: none;
   z-index: 20;
+}
+
+/**
+ * Tucked into the top-right corner of the first panel in the right column,
+ * floating above it rather than sitting in its content: the panel's title runs
+ * along the left of that same line and the corner beside it is empty.
+ */
+.settings {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-6);
+  pointer-events: auto;
+}
+
+/**
+ * Once the columns stack there is no panel in the top-right to tuck into — the
+ * table is up there instead, and the control would sit on a tile. It moves to
+ * the bottom corner, where nothing is. The menu works out for itself that it
+ * now has to open upward.
+ */
+@media (max-width: 1040px) {
+  .settings {
+    top: auto;
+    bottom: var(--space-4);
+    right: var(--space-4);
+  }
 }
