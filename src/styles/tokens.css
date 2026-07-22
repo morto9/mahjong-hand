@@ -66,8 +66,8 @@
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --text-xs: 0.6875rem;
-  --text-sm: 0.8125rem;
+  --text-xs: 0.79rem;
+  --text-sm: 0.95rem;
   --text-base: 0.9375rem;
   --text-lg: 1.125rem;
   --text-xl: 1.5rem;
@@ -112,7 +112,12 @@
   --duration-reveal: 620ms;
 
   /* ── Layout ────────────────────────────────────────────────────────────── */
-  --shell-max: 1180px;
+  /**
+   * Width of the board and the landing page. `max-width`, not `width`, so a
+   * narrower screen simply fills; the cap keeps a wide one a centred
+   * composition rather than stretching the two hands apart.
+   */
+  --shell-max: 1440px;
 }
 
 /**
