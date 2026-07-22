@@ -24,6 +24,9 @@ interface LandingScreenProps {
 /** Decorative hand shown behind the hero — a nod at what the game is played with. */
 const SHOWCASE_TYPE_IDS = ['dragon-red', 'bamboo-7', 'wind-east', 'dot-3'];
 
+/** Medal by finishing place. Beyond the podium there is no colour, by design. */
+const MEDALS = ['gold', 'silver', 'bronze'] as const;
+
 /**
  * Rule bullets, generated from the live config so the copy can never drift from
  * the rules actually in force. Glyphs come from the tile registry.
@@ -93,16 +96,23 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
 
   return (
     <main className={styles.screen}>
+      <header className={styles.masthead}>
+        <h1 className={styles.gameTitle}>
+          Mahjong <em>Hands Betting</em>
+        </h1>
+      </header>
+
       <div className={styles.inner}>
         <section className={styles.hero}>
           {/* <span className={styles.kicker}>Mahjong · Hand betting</span> */}
 
-          <h1 className={styles.title}>
+          {/* The game's name is the page's h1 above; this is the pitch under it. */}
+          <h2 className={styles.title}>
             Read the wall.
             <br />
             Call it.<br />
             <em>higher or lower ?</em>
-          </h1>
+          </h2>
 
           <p className={styles.lede}>
             Three tiles are dealt, bet whether the next hand totals more or less. <br/>Numbers of dragons and winds shift with every hand they touch,<br/>any tile that
@@ -144,7 +154,7 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
               row to belong to, and settings is one of the things you come here
               to do. No exit — there is no run on the table to leave.
             */}
-            <SettingsMenu />
+            <SettingsMenu size="lg" />
           </div>
 
           {/* {resumeSummary && (
@@ -164,7 +174,7 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
             ) : (
               <ol className={styles.board}>
                 {entries.map((entry, index) => (
-                  <li key={entry.id} className={cx(styles.entry, index === 0 && styles.first)}>
+                  <li key={entry.id} className={cx(styles.entry, MEDALS[index] && styles[MEDALS[index]!])}>
                     <span className={styles.rank}>{index + 1}</span>
                     <span className={styles.who}>
                       <span className={styles.name}>{entry.name}</span>

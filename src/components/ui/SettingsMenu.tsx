@@ -11,12 +11,14 @@ import {
 import { useSound } from '@/lib/useSound';
 import { useTheme, type ThemePreference } from '@/lib/useTheme';
 import { cx } from '@/lib/cx';
-import { Button } from './Button';
+import { Button, type ButtonSize } from './Button';
 import styles from './SettingsMenu.module.css';
 
 interface SettingsMenuProps {
   /** Only supplied while a run is on the table. */
   onExitGame?: () => void;
+  /** Matches the trigger to the buttons it sits with. Corner placement stays small. */
+  size?: ButtonSize;
   className?: string;
 }
 
@@ -39,7 +41,7 @@ const THEME_ICON: Record<ThemePreference, string> = {
  * also opens on click and on focus entering the group, and closes on Escape or
  * a click elsewhere.
  */
-export function SettingsMenu({ onExitGame, className }: SettingsMenuProps) {
+export function SettingsMenu({ onExitGame, size = 'sm', className }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
   /** True when there is not enough room below, so the menu opens upward. */
   const [dropUp, setDropUp] = useState(false);
@@ -136,7 +138,7 @@ export function SettingsMenu({ onExitGame, className }: SettingsMenuProps) {
     >
       <Button
         variant="ghost"
-        size="sm"
+        size={size}
         className={styles.trigger}
         // Opens rather than toggles: hover and focus have usually opened it
         // already, so a toggle here would read as "clicking closes the menu".
