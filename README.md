@@ -1,4 +1,4 @@
-# Jade Wager — Mahjong Hand Betting
+# Mahjong Hands — Betting Game
 
 A hand betting game played with mahjong tiles. Three tiles are dealt; you call whether the next
 hand totals **higher** or **lower**. Numbered tiles are worth their face value, but dragons and
@@ -192,6 +192,31 @@ A finished run is cleared rather than saved — it belongs on the summary screen
 - The board is one CSS grid reflowed by breakpoint — there is no separate mobile layout.
 
 ---
+
+## Images
+
+Everything in `public/` is generated from a single master logo — a 1254px PNG of about 2.4 MB, which
+is not committed and never shipped. To regenerate after the artwork changes:
+
+```powershell
+pwsh scripts/build-logo-assets.ps1 -Source "path\to\logo no bg.png"
+```
+
+It emits the masthead image, the Apple touch icon, two favicons and the link-preview card, and
+prints their sizes. Two decisions are baked into it:
+
+- **The transparent master is the only source needed.** The badge is opaque inside its gold ring, so
+  it sits correctly on the dark felt, on the light theme, and on a browser tab alike.
+- **The favicons are cut from the badge's centre tile, not shrunk from the whole logo.** The full
+  badge is legible down to about 180px and then collapses into an indistinct green disc; the single
+  tile survives the same reduction as a recognisable mahjong tile.
+
+`System.Drawing` writes lossless PNG with no palette reduction, so `logo.png` is ~177 KB — the
+heaviest thing the landing page loads. A lossy WebP would be a fraction of that if `cwebp` or
+`sharp` is ever available here.
+
+Open Graph tags in `index.html` use a `PLACEHOLDER-DOMAIN` that **must be replaced at deploy**;
+absolute URLs are required and this game has no domain yet.
 
 ## Development
 

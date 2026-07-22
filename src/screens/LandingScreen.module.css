@@ -16,17 +16,25 @@
   animation: rise-in var(--duration-slow) var(--ease-out) both;
 }
 
+/* Holds only the logo, so it carries no type of its own. */
 .gameTitle {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--text-strong);
+  margin: 0;
+  line-height: 0;
 }
 
-.gameTitle em {
-  font-style: italic;
-  color: var(--accent);
+/**
+ * Sized by height, not width.
+ *
+ * The landing page is a single screenful and the badge is square, so height is
+ * the scarce dimension — a natural-size logo would push the leaderboard and the
+ * actions off the bottom. `vh` between two fixed bounds keeps it generous on a
+ * tall window and modest on a laptop, the same approach the hand tiles use.
+ */
+.logo {
+  display: block;
+  height: clamp(80px, 13.5vh, 144px);
+  width: auto;
+  margin: 0 auto;
 }
 
 .inner {

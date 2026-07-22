@@ -35,6 +35,11 @@ export function SummaryScreen({
   return (
     <main className={styles.screen}>
       <section className={styles.card}>
+        {/* Decorative: the name is already in the tab and on the landing page,
+            so this stays out of the accessibility tree rather than making a
+            screen reader announce it again before the result. */}
+        <img className={styles.logo} src="/logo.png" width={320} height={320} alt="" />
+
         <div>
           <h1 className={styles.reasonTitle}>{state.gameOverReason?.title ?? 'Run over'}</h1>
           <p className={styles.reasonDetail}>{state.gameOverReason?.detail}</p>

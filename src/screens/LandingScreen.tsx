@@ -97,8 +97,22 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
   return (
     <main className={styles.screen}>
       <header className={styles.masthead}>
+        {/*
+          The logo carries the game's name, so it *is* the h1 — the alt text is
+          what a screen reader and a failed image both fall back to.
+
+          Intrinsic width/height are given so the browser reserves the box before
+          the image loads: this page is fitted to the viewport, and a late-arriving
+          masthead would otherwise shove everything below it down on load.
+        */}
         <h1 className={styles.gameTitle}>
-          Mahjong <em>Hands Betting</em>
+          <img
+            className={styles.logo}
+            src="/logo.png"
+            width={320}
+            height={320}
+            alt="Mahjong Hands — Betting Game"
+          />
         </h1>
       </header>
 
