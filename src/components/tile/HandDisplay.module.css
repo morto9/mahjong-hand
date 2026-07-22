@@ -41,6 +41,25 @@
   color: var(--text-faint);
 }
 
+/**
+ * On a very short screen the caption gives up size before the tiles do.
+ *
+ * With the two hands stacked, every fixed cost here is paid twice, and the
+ * total at its full display size is the largest of them. Shrinking it and the
+ * gap around it buys back enough height to keep the tiles legible and the board
+ * free of its own scrollbar — the tiles are what the game is read from, so they
+ * are the last thing that should shrink.
+ */
+@media (min-width: 1041px) and (max-height: 740px) {
+  .hand {
+    gap: var(--space-2);
+  }
+
+  .total {
+    font-size: var(--text-2xl);
+  }
+}
+
 /* Slot held open before a bet is placed — present, but clearly not in play. */
 .awaiting .label,
 .awaiting .total {

@@ -35,16 +35,18 @@
 /**
  * The hand tiles answer to both dimensions of the space they are in.
  *
- * `9.5vh` keeps a short laptop screen from losing the board vertically. `10.5cqw`
- * — a share of the table's own width, via the container declared on it — keeps a
- * narrow-but-tall window from wrapping a three-tile hand onto two rows, which
- * height alone cannot see: a 1100x1080 window gets tall-screen tiles in a
- * half-width table. The smaller of the two wins, then it is clamped so the glyph
- * never stops reading and never exceeds the design size.
+ * With the two hands stacked, each one has the table's full width but they share
+ * its height, so height is the binding constraint and the vh term normally wins.
+ * `30cqw` — a share of the table's own width, via the container declared on it —
+ * is the point at which three tiles and their gaps would fill that width, so it
+ * only takes over on a narrow table and stops a hand wrapping onto two rows.
+ *
+ * The smaller of the two wins, then it is clamped: never so small the glyph
+ * stops reading, never so large the pair stops fitting above the controls.
  */
 .lg .tile,
 .tile.lg {
-  --tile-w: clamp(46px, min(9.5vh, 10.5cqw), 84px);
+  --tile-w: clamp(46px, min(11vh, 30cqw), 120px);
 }
 
 /* ── Faces ──────────────────────────────────────────────────────────────── */
