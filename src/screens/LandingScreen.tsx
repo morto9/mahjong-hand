@@ -102,7 +102,8 @@ export function LandingScreen({
           <h1 className={styles.title}>
             Read the wall.
             <br />
-            Call it <em>higher or lower</em>.
+            Call it.<br />
+            <em>higher or lower ?</em>
           </h1>
 
           <p className={styles.lede}>

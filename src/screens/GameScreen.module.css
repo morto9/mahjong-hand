@@ -15,33 +15,23 @@
   animation: screen-in var(--duration-base) var(--ease-out) both;
 }
 
-/* ── HUD ────────────────────────────────────────────────────────────────── */
-.hud {
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-  padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: var(--bg-panel);
-  backdrop-filter: blur(10px);
-}
-
-/* Score leads on the left; the round counters sit together on the right. */
-.counters {
-  display: flex;
-  gap: var(--space-6);
-  margin-left: auto;
-  /* Room for the fixed settings control in the corner. */
-  padding-right: var(--space-7);
-}
-
 /* ── Body ───────────────────────────────────────────────────────────────── */
 .body {
   display: grid;
-  grid-template-columns: 250px 1fr 250px;
+  grid-template-columns: 250px minmax(0, 1fr) 250px;
+  grid-template-areas: 'left table right';
   gap: var(--space-5);
   align-items: start;
+}
+
+.railLeft {
+  grid-area: left;
+}
+
+.railRight {
+  grid-area: right;
+  /* Clears the fixed settings control in the corner. */
+  padding-top: var(--space-6);
 }
 
 .rail {
@@ -52,6 +42,7 @@
 
 /* ── Table ──────────────────────────────────────────────────────────────── */
 .table {
+  grid-area: table;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -136,15 +127,21 @@
 }
 
 @media (max-width: 1040px) {
+  /**
+   * Stacked, and deliberately reordered: the hand being bet on comes first, the
+   * score right under it, and the reference panels last. The player should never
+   * scroll past deck statistics to reach the board.
+   */
   .body {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'table'
+      'right'
+      'left';
   }
 
-  /* The table leads once the rails stack — the player should not have to scroll
-     past deck statistics to reach the hand they are betting on. */
-  .table {
-    order: -1;
+  .railRight {
+    padding-top: 0;
   }
 
   .rail {
@@ -161,16 +158,6 @@
   .screen {
     padding: var(--space-4) var(--space-3) var(--space-6);
     gap: var(--space-4);
-  }
-
-  .hud {
-    gap: var(--space-4);
-    padding: var(--space-4);
-  }
-
-  .counters {
-    gap: var(--space-4);
-    padding-right: 0;
   }
 
   .table {

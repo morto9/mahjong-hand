@@ -3,11 +3,11 @@ import { useMemo } from 'react';
 import { BetControls } from '@/components/game/BetControls';
 import { DeckStatus } from '@/components/game/DeckStatus';
 import { RoundFeedback } from '@/components/game/RoundFeedback';
+import { RunStats } from '@/components/game/RunStats';
 import { TileValueRail } from '@/components/game/TileValueRail';
 import { HandDisplay } from '@/components/tile/HandDisplay';
 import { HistoryStrip } from '@/components/tile/HistoryStrip';
 import { Panel } from '@/components/ui/Panel';
-import { Stat } from '@/components/ui/Stat';
 import type { TileTypeId } from '@/domain/types';
 import { cx } from '@/lib/cx';
 import { useGame } from '@/state/GameProvider';
@@ -30,24 +30,8 @@ export function GameScreen() {
 
   return (
     <main className={styles.screen}>
-      <header className={styles.hud}>
-        <Stat label="Score" value={state.score} size="lg" tone="accent" countUp />
-
-        <div className={styles.counters}>
-          <Stat label="Hand" value={state.round} align="center" />
-          <Stat
-            label="Streak"
-            value={state.streak > 0 ? `${state.streak}×` : '—'}
-            tone={state.streak > 0 ? 'positive' : 'default'}
-            align="center"
-            animateChange
-          />
-          <Stat label="Best" value={state.bestStreak} align="center" />
-        </div>
-      </header>
-
       <div className={styles.body}>
-        <div className={styles.rail}>
+        <div className={cx(styles.rail, styles.railLeft)}>
           <DeckStatus />
           <Panel title="History">
             <HistoryStrip rounds={history} values={state.values} />
@@ -124,7 +108,8 @@ export function GameScreen() {
           </p>
         </section>
 
-        <div className={styles.rail}>
+        <div className={cx(styles.rail, styles.railRight)}>
+          <RunStats />
           <TileValueRail />
         </div>
       </div>
