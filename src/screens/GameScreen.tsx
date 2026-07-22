@@ -32,10 +32,8 @@ export function GameScreen() {
     <main className={styles.screen}>
       <div className={styles.body}>
         <div className={cx(styles.rail, styles.railLeft)}>
-          <DeckStatus />
-          <Panel title="History" fill>
-            <HistoryStrip rounds={history} values={state.values} />
-          </Panel>
+          <RunStats />
+          <TileValueRail />
         </div>
 
         <section className={cx(styles.table, outcome && styles[outcome])} aria-label="Table">
@@ -92,7 +90,7 @@ export function GameScreen() {
                   prompt={
                     isRevealing
                       ? 'Turning the tiles…'
-                      : `Will the next hand total more or less than ${state.currentHand.total}?`
+                      : `Will the next hand total more or less than ${state.currentHand.total} ?`
                   }
                 />
               </div>
@@ -109,8 +107,10 @@ export function GameScreen() {
         </section>
 
         <div className={cx(styles.rail, styles.railRight)}>
-          <RunStats />
-          <TileValueRail />
+          <DeckStatus />
+          <Panel title="History" fill>
+            <HistoryStrip rounds={history} values={state.values} />
+          </Panel>
         </div>
       </div>
     </main>
