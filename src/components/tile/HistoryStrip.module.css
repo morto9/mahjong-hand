@@ -6,7 +6,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  max-height: 340px;
+  /* Height comes from the panel, which is sized by the column it sits in. */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   /* Room for the scrollbar so entries do not sit under it. */
   padding-right: var(--space-1);
@@ -106,7 +108,7 @@
   font-weight: 700;
 }
 
-/* Alongside the other rail panels on narrower screens, so it can breathe. */
+/* Stacked with the other rail panels, where the page scrolls instead. */
 @media (max-width: 1040px) {
   .strip {
     max-height: 260px;

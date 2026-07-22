@@ -9,6 +9,11 @@ interface PanelProps extends HTMLAttributes<HTMLElement> {
   action?: ReactNode;
   raised?: boolean;
   flush?: boolean;
+  /**
+   * Absorbs the leftover height of a flex column, letting its content scroll
+   * internally rather than growing the page.
+   */
+  fill?: boolean;
   as?: 'section' | 'aside' | 'div';
   children: ReactNode;
 }
@@ -19,6 +24,7 @@ export function Panel({
   action,
   raised = false,
   flush = false,
+  fill = false,
   as: Tag = 'section',
   className,
   children,
@@ -26,7 +32,13 @@ export function Panel({
 }: PanelProps) {
   return (
     <Tag
-      className={cx(styles.panel, raised && styles.raised, flush && styles.flush, className)}
+      className={cx(
+        styles.panel,
+        raised && styles.raised,
+        flush && styles.flush,
+        fill && styles.fill,
+        className,
+      )}
       {...rest}
     >
       {(title || action) && (

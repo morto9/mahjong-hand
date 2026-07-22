@@ -15,7 +15,7 @@ export function TileValueRail() {
   const honors = useHonorValues();
 
   return (
-    <Panel title="Honour values">
+    <Panel title="Honour values" fill>
       <ul className={styles.rail}>
         {honors.map(({ type, value, drift, atRisk, lastMove }) => (
           <li

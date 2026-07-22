@@ -32,9 +32,14 @@
   --tile-w: 56px;
 }
 
+/**
+ * The hand tiles scale with viewport height so a short laptop screen still fits
+ * the whole board. Clamped at both ends: never so small the glyph stops reading,
+ * never larger than the design size.
+ */
 .lg .tile,
 .tile.lg {
-  --tile-w: 84px;
+  --tile-w: clamp(58px, 9.5vh, 84px);
 }
 
 /* ── Faces ──────────────────────────────────────────────────────────────── */

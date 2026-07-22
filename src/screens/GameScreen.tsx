@@ -33,7 +33,7 @@ export function GameScreen() {
       <div className={styles.body}>
         <div className={cx(styles.rail, styles.railLeft)}>
           <DeckStatus />
-          <Panel title="History">
+          <Panel title="History" fill>
             <HistoryStrip rounds={history} values={state.values} />
           </Panel>
         </div>

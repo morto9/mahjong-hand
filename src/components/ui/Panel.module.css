@@ -17,6 +17,21 @@
   padding: 0;
 }
 
+/**
+ * Takes the remaining height of a flex column. `min-height: 0` is what allows it
+ * to shrink below its content so the content scrolls instead of the page.
+ *
+ * Which child absorbs the slack is left to the panel's contents to declare — the
+ * scrollable part is not always the last one (the honour list, for instance, is
+ * followed by a legend that must stay put).
+ */
+.fill {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .header {
   display: flex;
   align-items: baseline;
