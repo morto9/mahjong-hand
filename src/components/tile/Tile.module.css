@@ -5,6 +5,7 @@
  */
 
 .scene {
+  position: relative;
   perspective: 900px;
   flex: none;
 }
@@ -173,6 +174,66 @@
  */
 .scene.hoverable:hover .tile:not(.faceDown) {
   transform: translateY(-3px) rotateX(4deg);
+}
+
+/* ── Tooltip ────────────────────────────────────────────────────────────── */
+
+/**
+ * Names the tile and states what it is currently worth.
+ *
+ * It opens *towards* the middle of the table — below the upper hand, above the
+ * lower one — rather than outward. The board is fitted to the viewport with
+ * little height to spare, and the table clips vertically, so a tip pointing out
+ * past the tiles would be cut off on a short screen. Pointing inward it lands
+ * over the hand's caption instead, which is transient and reads as a tooltip
+ * floating above the board.
+ */
+.tip {
+  position: absolute;
+  left: 50%;
+  z-index: 5;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.tipBelow {
+  top: calc(100% + var(--space-2));
+  transform: translate(-50%, -4px);
+}
+
+.tipAbove {
+  bottom: calc(100% + var(--space-2));
+  transform: translate(-50%, 4px);
+}
+
+.scene:hover .tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.tipName {
+  font-size: var(--text-sm);
+  color: var(--text-strong);
+}
+
+.tipValue {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent);
 }
 
 /**

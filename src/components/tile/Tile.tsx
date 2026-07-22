@@ -23,6 +23,11 @@ interface TileProps {
   atRisk?: boolean;
   /** Lifts on hover. Only the live hands opt in; history minis do not. */
   hoverable?: boolean;
+  /**
+   * Names the tile and its value on hover, opening in the given direction.
+   * Omit for tiles that are decoration or reference rather than in play.
+   */
+  tip?: 'above' | 'below';
 }
 
 /**
@@ -63,6 +68,7 @@ export const Tile = memo(function Tile({
   baseValue,
   atRisk = false,
   hoverable = false,
+  tip,
 }: TileProps) {
   const value = valueOf(tile, values);
   const suitClass = tile.type.kind === 'number' ? tile.type.suit : tile.type.family;
@@ -98,6 +104,23 @@ export const Tile = memo(function Tile({
         </div>
         <div className={styles.back} />
       </div>
+
+      {/*
+        Never while face down — the whole point of that state is that the hand
+        has not been revealed yet, and a tip would give it away.
+
+        `aria-hidden` because the tile's own label already says both of these
+        things; without it a screen reader would hear the tile named twice.
+      */}
+      {tip && !faceDown && (
+        <span
+          className={cx(styles.tip, tip === 'above' ? styles.tipAbove : styles.tipBelow)}
+          aria-hidden="true"
+        >
+          <span className={styles.tipName}>{tile.type.label}</span>
+          <span className={styles.tipValue}>{value}</span>
+        </span>
+      )}
     </div>
   );
 });

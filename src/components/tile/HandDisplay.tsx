@@ -79,6 +79,9 @@ export function HandDisplay({
                 baseValue={baseValue}
                 atRisk={atRiskTypes?.has(tile.type.id) ?? false}
                 hoverable={!hidden}
+                // Opens toward the middle of the table, whichever way this
+                // hand is facing.
+                tip={mirrored ? 'above' : 'below'}
               />
             ))
           : Array.from({ length: tileCount }, (_, index) => (
