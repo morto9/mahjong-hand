@@ -124,7 +124,7 @@
   display: grid;
   align-items: center;
   justify-items: center;
-  gap: 0.3rem;
+  gap: 0rem;
   width: 100%;
 }
 

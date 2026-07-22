@@ -56,6 +56,17 @@
   line-height: 1.6;
 }
 
+/**
+ * The closing challenge, lifted out of the muted body copy.
+ *
+ * `--accent` rather than the literal #d7ac5c: it *is* that gold on the dark
+ * felt, and darkens to a readable bronze on the light theme, where gold on cream
+ * falls well under any usable contrast.
+ */
+.ledeCta {
+  color: var(--accent);
+}
+
 .actions {
   display: flex;
   align-items: center;

@@ -106,7 +106,8 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
 
           <p className={styles.lede}>
             Three tiles are dealt, bet whether the next hand totals more or less. <br/>Numbers of dragons and winds shift with every hand they touch,<br/>any tile that
-            drifts too far ends the night. <br/><strong>Can you make it to the top 5 ?</strong>
+            drifts too far ends the night. <br/>
+            <strong className={styles.ledeCta}>Can you make it to the top 5 ?</strong>
           </p>
 
           <div className={styles.fan} aria-hidden="true">
