@@ -15,24 +15,23 @@ npm run build      # typecheck + production build
 
 ## AI usage disclosure
 
-This was built with an AI coding agent (Claude Code) doing most of the hands-on
+This was built with the help of AI coding agent (Claude Code) doing the brain
 implementation, directed and reviewed by me throughout.
 
-**Mine:** the architecture decisions — the pure-domain / thin-React-binding split, the
-config-driven rules (nothing hardcodes a number `config.ts` owns), the phase-based state
+**Mine:** the architecture design, the pure domain / thin React binding split, the
+config driven rules (nothing hardcodes a number `config.ts` owns), the phase based state
 machine (`awaiting-bet → revealing → round-result → game-over`), and the extensibility
 strategy (registries for tile types and game-over rules, a swappable `ScoringRule`
 interface). Every prompt directing what to build or fix next, and the resulting
-trade-off calls — e.g. why dealing and resolving are separate reducer actions, why
+trade off calls, e.g. why dealing and resolving are separate reducer actions, why
 honour drift is per tile *type* rather than per tile, why a reshuffle is reported by
-`deck.ts` but the game-over decision is made by the reducer, not the deck module.
-Manual QA of every feature in the browser — game-over triggers, reshuffle behaviour,
-keyboard controls, resume-after-reload, and layout across breakpoints — with issues
-found that way turned into follow-up fixes.
+`deck.ts` but the game over decision is made by the reducer, not the deck module.
+Manual QA of every feature in the browser game over triggers, reshuffle behaviour,
+keyboard controls, resume after reload, and layout across breakpoints, with issues
+found that way turned into follow up fixes.
 
-**AI-assisted:** the bulk of the implementation — React components, CSS, the first
-draft of each domain module, the test suites, and this README — written by the agent
-against the direction and constraints above, then reviewed and iterated on by me.
+**AI-assisted:** the bulk of the implementation React components, CSS, the first
+draft of each domain module, the test suites, then reviewed and iterated on by me.
 
 ---
 
@@ -250,19 +249,8 @@ known once the project is actually imported there; it can come out different. Up
 (`grep -rn vercel.app index.html README.md`) once the real address is known, or sooner if a custom
 domain is added.
 
-## Deploying
-
-`vercel.json` is already in the repo, built from the same pattern the sibling portfolio project
-uses: `npm run build` (which is `tsc --noEmit && vite build` here) to `dist/`, with a catch-all
-rewrite to `index.html`. The rewrite isn't fixing anything today — this app has no router, so there
-is only one path to ever request — but it costs nothing to have in place if that changes later.
-
-Import the repo at [vercel.com/new](https://vercel.com/new); Vercel reads `vercel.json` and needs no
-further configuration. There is no git remote configured for this repo yet, so that's the first
-thing to sort out Vercel needs to pull from somewhere.
-
 ## Development
 
 `?maxReshuffles=1`, `?valueCeiling=6`, `?valueFloor=4` and any other `GameConfig` key can be passed
 as a query parameter **in dev builds only** (`domain/config.ts:configFromSearchParams`), to make
-game-over states reachable without playing dozens of hands.
+game over states reachable without playing dozens of hands.
