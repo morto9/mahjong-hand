@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { Stat } from '@/components/ui/Stat';
+import { audio } from '@/services/audio';
 import { useGame } from '@/state/GameProvider';
 import styles from './SummaryScreen.module.css';
 
@@ -31,6 +32,13 @@ export function SummaryScreen({
   };
 
   const wins = state.history.filter((r) => r.outcome === 'win').length;
+
+  // Fires once, when this screen appears with a score that clears the board —
+  // `qualifies` is a settled fact by the time this mounts (App.tsx computes it
+  // from the already-final `state.score`), not something a click decides.
+  useEffect(() => {
+    if (qualifies) audio.play('highScore');
+  }, [qualifies]);
 
   return (
     <main className={styles.screen}>

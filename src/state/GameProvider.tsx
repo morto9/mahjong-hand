@@ -97,6 +97,21 @@ export function GameProvider({ children, engine, config, initialState }: GamePro
     }
   }, [state.phase, state.lastOutcome, state.gameOverReason]);
 
+  // A dedicated effect, deliberately not folded into the one above: `phase`
+  // alone can't tell a fresh run apart from an ordinary `CONTINUE` — both land
+  // on `awaiting-bet`, and if the previous run happened to be sitting at
+  // `awaiting-bet` too (abandoned before its first bet), the phase transition
+  // effect's dependencies would not even change. `seed` is reassigned by
+  // `createInitialState` on every `START_GAME` and nothing else, so it is the
+  // one value that uniquely means "a new run began."
+  const previousSeed = useRef<number | null>(null);
+  useEffect(() => {
+    const from = previousSeed.current;
+    previousSeed.current = state.seed;
+    if (from === null || from === state.seed) return; // never on first mount
+    audio.play('newGame');
+  }, [state.seed]);
+
   // Persist every committed state so a reload resumes rather than discards.
   // A finished run is cleared instead — it belongs on the summary screen, and
   // `runStore` refuses to resume one anyway.

@@ -217,8 +217,22 @@ It emits the masthead image, the Apple touch icon, the link-preview card, and �
 heaviest thing the landing page loads. A lossy WebP would be a fraction of that if `cwebp` or
 `sharp` is ever available here.
 
-Open Graph tags in `index.html` use a `PLACEHOLDER-DOMAIN` that **must be replaced at deploy**;
-absolute URLs are required and this game has no domain yet.
+Open Graph tags in `index.html` currently point at `mahjong-hand-bet.vercel.app` — a **guess**, not
+a confirmed value. It's Vercel's default project-name-derived subdomain, but the real one is only
+known once the project is actually imported there; it can come out different. Update the five spots
+(`grep -rn vercel.app index.html README.md`) once the real address is known, or sooner if a custom
+domain is added.
+
+## Deploying
+
+`vercel.json` is already in the repo, built from the same pattern the sibling portfolio project
+uses: `npm run build` (which is `tsc --noEmit && vite build` here) to `dist/`, with a catch-all
+rewrite to `index.html`. The rewrite isn't fixing anything today — this app has no router, so there
+is only one path to ever request — but it costs nothing to have in place if that changes later.
+
+Import the repo at [vercel.com/new](https://vercel.com/new); Vercel reads `vercel.json` and needs no
+further configuration. There is no git remote configured for this repo yet, so that's the first
+thing to sort out — Vercel needs to pull from somewhere.
 
 ## Development
 

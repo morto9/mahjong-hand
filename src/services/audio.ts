@@ -19,7 +19,11 @@ export type SoundCue =
   | 'loss'
   | 'push'
   /** The run ending. */
-  | 'gameOver';
+  | 'gameOver'
+  /** A fresh run beginning — the wall reset, waiting on the first bet. */
+  | 'newGame'
+  /** This run's score just cleared the leaderboard. */
+  | 'highScore';
 
 export interface AudioService {
   play(cue: SoundCue): void;
@@ -67,6 +71,18 @@ export function createAudioService(initiallyMuted = false): AudioService {
     return context;
   }
 
+  /**
+   * Small random variation, so a cue played over and over — the three-tile
+   * `deal` most of all — doesn't sound machine-identical every round. `amount`
+   * is a fraction: 0.04 means ±4%. Multiplicative, so a value of exactly 0
+   * (the first note in a phrase, almost always at `at: 0`) is left alone —
+   * there's nothing to vary it against, and that's fine, only the notes after
+   * it need humanizing.
+   */
+  function jitter(value: number, amount = 0.04): number {
+    return value * (1 + (Math.random() * 2 - 1) * amount);
+  }
+
   interface ToneOptions {
     freq: number;
     /** Delay before the note starts, in seconds. */
@@ -83,7 +99,7 @@ export function createAudioService(initiallyMuted = false): AudioService {
     ctx: AudioContext,
     { freq, at = 0, duration = 0.16, gain = 0.12, type = 'triangle', sweepTo = 0 }: ToneOptions,
   ) {
-    const start = ctx.currentTime + at;
+    const start = ctx.currentTime + jitter(at);
     const osc = ctx.createOscillator();
     const amp = ctx.createGain();
 
@@ -123,7 +139,7 @@ export function createAudioService(initiallyMuted = false): AudioService {
 
     const filter = ctx.createBiquadFilter();
     filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(cutoff, start);
+    filter.frequency.setValueAtTime(jitter(cutoff), start);
     filter.Q.setValueAtTime(1.4, start);
 
     const amp = ctx.createGain();
@@ -180,6 +196,25 @@ export function createAudioService(initiallyMuted = false): AudioService {
           tone(ctx, { freq: 392, duration: 0.3, type: 'sine' });
           tone(ctx, { freq: 311.13, at: 0.22, duration: 0.34, type: 'sine' });
           tone(ctx, { freq: 196, at: 0.46, duration: 0.6, gain: 0.14, type: 'sine' });
+          break;
+
+        case 'newGame':
+          // A soft settle: the wall freshly built, then a calm, unhurried
+          // welcome — deliberately gentler than `win`, since nothing has been
+          // won yet.
+          clack(ctx, { at: 0, gain: 0.08, cutoff: 1500 });
+          tone(ctx, { freq: 349.23, at: 0.08, duration: 0.22, gain: 0.07, type: 'sine' });
+          tone(ctx, { freq: 440, at: 0.22, duration: 0.32, gain: 0.08, type: 'sine' });
+          break;
+
+        case 'highScore':
+          // A fuller flourish than a plain win — a four-note major arpeggio
+          // rather than `win`'s bare fifth, in the same bright triangle timbre
+          // so it still reads as part of the same family of good news.
+          tone(ctx, { freq: 523.25, duration: 0.14 });
+          tone(ctx, { freq: 659.25, at: 0.09, duration: 0.16 });
+          tone(ctx, { freq: 783.99, at: 0.18, duration: 0.18 });
+          tone(ctx, { freq: 1046.5, at: 0.28, duration: 0.36, gain: 0.1 });
           break;
       }
     },

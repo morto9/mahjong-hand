@@ -79,9 +79,7 @@ function ordinalSuffix(n: number): string {
   return ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
 }
 
-// `resumeSummary` is still accepted, and still passed, but the note that
-// rendered it is currently commented out below.
-export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenProps) {
+export function LandingScreen({ entries, onNewGame, onResume, resumeSummary }: LandingScreenProps) {
   const { config } = useGame();
   const rules = useMemo(() => buildRules(config), [config]);
 
@@ -172,12 +170,12 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
             <SettingsMenu size="lg" placement="above" />
           </div>
 
-          {/* {resumeSummary && (
+          {resumeSummary && (
             <p className={styles.resumeNote}>
               Hand {resumeSummary.round} · {resumeSummary.score} points on the table. Starting a new
               game discards it.
             </p>
-          )} */}
+          )}
         </section>
 
         <aside className={styles.side}>

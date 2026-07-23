@@ -16,16 +16,20 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-    <!-- Absolute URLs are required here, and this game has no domain yet.
-         PLACEHOLDER-DOMAIN must be replaced at deploy or the preview breaks. -->
+    <!-- mahjong-hand-bet.vercel.app is a best guess, not a confirmed fact: it's
+         Vercel's default project-name-derived subdomain, matching package.json's
+         "name". The actual subdomain is assigned when the project is imported
+         and can come out differently (a name collision, a custom name chosen at
+         import, or a custom domain added later). Update these five lines —
+         `grep -rn vercel.app` finds all of them — once the real one is known. -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Mahjong Hands" />
     <meta
       property="og:description"
       content="Read the wall, call higher or lower, and survive the shuffle."
     />
-    <meta property="og:url" content="https://PLACEHOLDER-DOMAIN/" />
-    <meta property="og:image" content="https://PLACEHOLDER-DOMAIN/og.jpg" />
+    <meta property="og:url" content="https://mahjong-hand-bet.vercel.app/" />
+    <meta property="og:image" content="https://mahjong-hand-bet.vercel.app/og.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -34,7 +38,7 @@
       name="twitter:description"
       content="Read the wall, call higher or lower, and survive the shuffle."
     />
-    <meta name="twitter:image" content="https://PLACEHOLDER-DOMAIN/og.jpg" />
+    <meta name="twitter:image" content="https://mahjong-hand-bet.vercel.app/og.jpg" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

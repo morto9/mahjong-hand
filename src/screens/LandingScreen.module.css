@@ -39,7 +39,11 @@
  */
 .logo {
   display: block;
-  height: clamp(175px, 15vh, 168px);
+  /* Was `clamp(175px, 15vh, 168px)` — min above max, which CSS resolves by
+     pinning to the min and ignoring `15vh` entirely, so the logo stopped
+     answering to viewport height at all. That's what was actually pushing this
+     page into scrolling, not the resume note restored alongside it. */
+  height: clamp(96px, 15vh, 175px);
   width: auto;
   padding-left: 1.5rem;
 }
@@ -59,22 +63,6 @@
   flex-direction: column;
   gap: var(--space-5);
   animation: rise-in var(--duration-slow) var(--ease-out) both;
-}
-
-.kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  align-self: flex-start;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border);
-  background: var(--bg-panel);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  color: var(--text-muted);
 }
 
 .title {
