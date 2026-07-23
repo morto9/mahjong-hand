@@ -202,14 +202,16 @@ is not committed and never shipped. To regenerate after the artwork changes:
 pwsh scripts/build-logo-assets.ps1 -Source "path\to\logo no bg.png"
 ```
 
-It emits the masthead image, the Apple touch icon, two favicons and the link-preview card, and
-prints their sizes. Two decisions are baked into it:
+It emits the masthead image, the Apple touch icon, the link-preview card, and — the first time only
+— the two favicons. Two decisions are baked into it:
 
 - **The transparent master is the only source needed.** The badge is opaque inside its gold ring, so
   it sits correctly on the dark felt, on the light theme, and on a browser tab alike.
-- **The favicons are cut from the badge's centre tile, not shrunk from the whole logo.** The full
-  badge is legible down to about 180px and then collapses into an indistinct green disc; the single
-  tile survives the same reduction as a recognisable mahjong tile.
+- **`favicon-32.png` / `favicon-16.png` are hand-picked artwork, not generated.** The script's own
+  fallback cuts one from the badge's centre tile — the full badge collapses into an indistinct green
+  disc at 32px, while a single tile survives the same reduction as something recognisable — but once
+  a curated file exists in `public/`, the script leaves it alone rather than silently overwriting the
+  choice. Drop a new one in directly to change it; delete it first if you want the script's crop back.
 
 `System.Drawing` writes lossless PNG with no palette reduction, so `logo.png` is ~177 KB — the
 heaviest thing the landing page loads. A lossy WebP would be a fraction of that if `cwebp` or

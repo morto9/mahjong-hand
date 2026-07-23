@@ -75,8 +75,13 @@ function Save-Square {
 }
 
 <#
-  A tab icon cut from the badge's centre tile rather than shrunk from the whole
+  Cuts a tab icon from the badge's centre tile rather than shrinking the whole
   logo.
+
+  Unused by default — see the note above `favicon-32.png` / `favicon-16.png`
+  below, which are now hand-picked artwork rather than a crop of the badge.
+  Kept here as the fallback this script reaches for if no curated favicon exists
+  yet.
 
   The full badge is legible down to about 180px, but at 32 it collapses into an
   indistinct green disc — the lettering and the fan of tiles are simply gone. The
@@ -133,8 +138,24 @@ $written = @()
 # detail nothing renders.
 $written += Save-Square -Size 320 -Name 'logo.png'            # masthead + summary, at 2x
 $written += Save-Square -Size 180 -Name 'apple-touch-icon.png'  # whole badge still reads here
-$written += Save-TileIcon -Size 32 -Name 'favicon-32.png'
-$written += Save-TileIcon -Size 16 -Name 'favicon-16.png'
+
+<#
+  favicon-32.png / favicon-16.png are hand-picked artwork, not a crop of the
+  master — they are chosen and dropped into public/ directly, not regenerated
+  here. Re-running this script must not silently overwrite that choice with the
+  auto-cropped tile icon, so it only fills them in the first time, when there is
+  nothing there yet to lose.
+#>
+foreach ($size in 32, 16) {
+  $name = "favicon-$size.png"
+  $path = Join-Path $OutDir $name
+  if (Test-Path $path) {
+    Write-Host "Skipping $name — curated artwork already in public/, not regenerating."
+  } else {
+    $written += Save-TileIcon -Size $size -Name $name
+  }
+}
+
 $written += Save-Preview -Width 1200 -Height 630 -Name 'og.jpg'
 
 $master.Dispose()
