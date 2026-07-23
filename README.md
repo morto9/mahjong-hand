@@ -1,8 +1,8 @@
-# Mahjong Hands — Betting Game
+# Mahjong Hands: Betting Game
 
 A hand betting game played with mahjong tiles. Three tiles are dealt; you call whether the next
 hand totals **higher** or **lower**. Numbered tiles are worth their face value, but dragons and
-winds drift with every hand they touch — and a tile that drifts too far ends the night.
+winds drift with every hand they touch and a tile that drifts too far ends the night.
 
 ```bash
 npm install
@@ -10,6 +10,29 @@ npm run dev        # http://localhost:5174
 npm test           # domain rules + component suites (90 tests)
 npm run build      # typecheck + production build
 ```
+
+---
+
+## AI usage disclosure
+
+This was built with an AI coding agent (Claude Code) doing most of the hands-on
+implementation, directed and reviewed by me throughout.
+
+**Mine:** the architecture decisions — the pure-domain / thin-React-binding split, the
+config-driven rules (nothing hardcodes a number `config.ts` owns), the phase-based state
+machine (`awaiting-bet → revealing → round-result → game-over`), and the extensibility
+strategy (registries for tile types and game-over rules, a swappable `ScoringRule`
+interface). Every prompt directing what to build or fix next, and the resulting
+trade-off calls — e.g. why dealing and resolving are separate reducer actions, why
+honour drift is per tile *type* rather than per tile, why a reshuffle is reported by
+`deck.ts` but the game-over decision is made by the reducer, not the deck module.
+Manual QA of every feature in the browser — game-over triggers, reshuffle behaviour,
+keyboard controls, resume-after-reload, and layout across breakpoints — with issues
+found that way turned into follow-up fixes.
+
+**AI-assisted:** the bulk of the implementation — React components, CSS, the first
+draft of each domain module, the test suites, and this README — written by the agent
+against the direction and constraints above, then reviewed and iterated on by me.
 
 ---
 
@@ -164,11 +187,11 @@ A finished run is cleared rather than saved — it belongs on the summary screen
 
 ## UI notes
 
-- **Tiles** are built in CSS — an ivory gradient face with a bevelled rim, an engraved inner
+- **Tiles** are built in CSS an ivory gradient face with a bevelled rim, an engraved inner
   border, a jade woven back, and a 3D `rotateY` flip on reveal. No image assets. One `Tile`
   component serves every size, so the history strip can never drift from the table.
 - Glyphs are the Unicode Mahjong Tiles block with **U+FE0E** (text presentation) appended in the
-  registry — without it, U+1F004 (Red Dragon) renders as a colour emoji while the other 33 tiles
+  registry without it, U+1F004 (Red Dragon) renders as a colour emoji while the other 33 tiles
   render as monochrome outlines.
 - **Theme** follows `prefers-color-scheme`; the toggle cycles auto → light → dark and writes
   `data-theme` on the root, which wins over the media query in both directions.
@@ -195,7 +218,7 @@ A finished run is cleared rather than saved — it belongs on the summary screen
 
 ## Images
 
-Everything in `public/` is generated from a single master logo — a 1254px PNG of about 2.4 MB, which
+Everything in `public/` is generated from a single master logo a 1254px PNG of about 2.4 MB, which
 is not committed and never shipped. To regenerate after the artwork changes:
 
 ```powershell
@@ -232,7 +255,7 @@ is only one path to ever request — but it costs nothing to have in place if th
 
 Import the repo at [vercel.com/new](https://vercel.com/new); Vercel reads `vercel.json` and needs no
 further configuration. There is no git remote configured for this repo yet, so that's the first
-thing to sort out — Vercel needs to pull from somewhere.
+thing to sort out Vercel needs to pull from somewhere.
 
 ## Development
 
