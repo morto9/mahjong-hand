@@ -61,6 +61,9 @@ describe('when a run ends', () => {
   });
 
   it('announces the ending to screen readers', async () => {
+    // Unrelated to onboarding — skip the auto-starting tutorial, which adds
+    // its own `role="status"` element and would make this query ambiguous.
+    localStorage.setItem('jade-wager.tutorial-seen', 'true');
     const user = renderApp();
     await playTheFinalHand(user);
 

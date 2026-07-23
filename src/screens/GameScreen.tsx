@@ -50,6 +50,7 @@ export function GameScreen() {
               // Round 1's hand is dealt from the wall; every later one arrived
               // by promotion from the next-hand slot.
               entrance={state.round === 1 ? 'deal' : 'slide'}
+              tutorialTarget="current-hand"
             />
 
             <span className={styles.versus}>vs</span>

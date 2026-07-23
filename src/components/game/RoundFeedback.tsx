@@ -33,7 +33,10 @@ export function RoundFeedback({
   const delta = incomingTotal - previousTotal;
 
   return (
-    <div className={cx(styles.feedback, styles[outcome], gameOverReason && styles.final)}>
+    <div
+      className={cx(styles.feedback, styles[outcome], gameOverReason && styles.final)}
+      data-tutorial-target="round-feedback"
+    >
       <p className={styles.headline}>{HEADLINE[outcome]}</p>
 
       <p className={styles.detail}>

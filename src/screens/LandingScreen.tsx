@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Medal, type MedalPlace } from '@/components/ui/Medal';
 import { Panel } from '@/components/ui/Panel';
 import { SettingsMenu } from '@/components/ui/SettingsMenu';
-import type { GameConfig } from '@/domain/config';
+import { buildRuleCopy } from '@/domain/ruleText';
 import { getTileType } from '@/domain/tiles';
 import type { Tile as TileModel } from '@/domain/types';
 import { createValueTable } from '@/domain/values';
@@ -20,6 +20,8 @@ interface LandingScreenProps {
   /** Present when a run from a previous visit is waiting to be picked up. */
   onResume?: () => void;
   resumeSummary?: { round: number; score: number };
+  /** Starts (or replays) the interactive first-hand walkthrough. */
+  onShowTutorial: () => void;
 }
 
 /** Decorative hand shown behind the hero — a nod at what the game is played with. */
@@ -28,60 +30,15 @@ const SHOWCASE_TYPE_IDS = ['dragon-red', 'bamboo-7', 'wind-east', 'dot-3'];
 /** Medal by finishing place. Beyond the podium there is no colour, by design. */
 const MEDALS = ['gold', 'silver', 'bronze'] as const;
 
-/**
- * Rule bullets, generated from the live config so the copy can never drift from
- * the rules actually in force. Glyphs come from the tile registry.
- */
-function buildRules(config: GameConfig): { typeId: string; body: JSX.Element }[] {
-  return [
-    {
-      typeId: 'dot-1',
-      body: (
-        <span>
-          <strong>Number tiles</strong> are worth their face value, 1 to 9.
-        </span>
-      ),
-    },
-    {
-      typeId: 'dragon-red',
-      body: (
-        <span>
-          <strong>Dragons and winds</strong> start at {config.baseHonorValue}, rise by 1 in a
-          winning hand and fall by 1 in a losing one.
-        </span>
-      ),
-    },
-    {
-      typeId: 'wind-east',
-      body: (
-        <span>
-          <strong>The run ends</strong> if any honour hits {config.valueFloor} or{' '}
-          {config.valueCeiling}, or when the wall is rebuilt for the {config.maxReshuffles}
-          {ordinalSuffix(config.maxReshuffles)} time.
-        </span>
-      ),
-    },
-    {
-      typeId: 'bamboo-1',
-      body: (
-        <span>
-          <strong>Correct calls</strong> score {config.scoreBase} × your streak, up to{' '}
-          {config.streakCap}×. Ties are a push.
-        </span>
-      ),
-    },
-  ];
-}
-
-function ordinalSuffix(n: number): string {
-  const v = n % 100;
-  if (v >= 11 && v <= 13) return 'th';
-  return ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
-}
-
-export function LandingScreen({ entries, onNewGame, onResume, resumeSummary }: LandingScreenProps) {
+export function LandingScreen({
+  entries,
+  onNewGame,
+  onResume,
+  resumeSummary,
+  onShowTutorial,
+}: LandingScreenProps) {
   const { config } = useGame();
-  const rules = useMemo(() => buildRules(config), [config]);
+  const rules = useMemo(() => buildRuleCopy(config), [config]);
 
   const showcase = useMemo<TileModel[]>(
     () =>
@@ -147,20 +104,55 @@ export function LandingScreen({ entries, onNewGame, onResume, resumeSummary }: L
           </div>
 
           <div className={styles.actions}>
-            {onResume ? (
-              <>
-                <Button variant="primary" size="lg" onClick={onResume} autoFocus>
-                  Resume
-                </Button>
-                <Button size="lg" onClick={onNewGame}>
-                  New game
-                </Button>
-              </>
-            ) : (
-              <Button variant="primary" size="lg" onClick={onNewGame} autoFocus>
-                New game
+            {/*
+              "Play" is a trigger, not an action of its own — it does nothing
+              on click, only opens the popup beneath it (the same "opens
+              rather than toggles" reasoning `SettingsMenu`'s own trigger
+              uses). The real choices — resume, start over, replay the
+              tutorial — live in that popup, open on hover or keyboard focus.
+              `:focus-within` is what keeps it reachable by keyboard: tabbing
+              onto "Play" reveals it, and it stays revealed while tabbing on
+              into the items themselves.
+            */}
+            <div className={styles.playGroup}>
+              <Button variant="primary" size="lg" autoFocus>
+                Play
               </Button>
-            )}
+
+              {/*
+                The gap between "Play" and the card lives inside `.playPopup`
+                (as padding), not between it and `.playGroup`, so there is no
+                dead strip of screen the pointer has to cross without hovering
+                anything — moving from the button up into the card stays
+                inside this element the whole way, the same shape
+                `SettingsMenu`'s own `.panel`/`.items` split uses.
+              */}
+              <div className={styles.playPopup}>
+                <div className={styles.playPopupCard}>
+                  {onResume && (
+                    <button type="button" className={styles.playPopupItem} onClick={onResume}>
+                      <span className={styles.playPopupIcon} aria-hidden="true">
+                        ▶
+                      </span>
+                      Resume
+                    </button>
+                  )}
+                  <button type="button" className={styles.playPopupItem} onClick={onNewGame}>
+                    <span className={styles.playPopupIcon} aria-hidden="true">
+                      ↺
+                    </span>
+                    New game
+                  </button>
+                  <span className={styles.playPopupSeparator} role="presentation" />
+                  <button type="button" className={styles.playPopupItem} onClick={onShowTutorial}>
+                    <span className={styles.playPopupIcon} aria-hidden="true">
+                      ❓
+                    </span>
+                    How to play
+                  </button>
+                </div>
+              </div>
+            </div>
 
             {/*
               Sits with the actions rather than in a corner: this screen has a

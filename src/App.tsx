@@ -8,8 +8,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { SettingsMenu } from '@/components/ui/SettingsMenu';
+import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
 import { configFromSearchParams } from '@/domain/config';
 import type { GameState } from '@/domain/types';
+import { buildTutorialSteps } from '@/lib/tutorialSteps';
+import { useTutorialSeen } from '@/lib/useTutorialSeen';
+import { useTutorialWalkthrough } from '@/lib/useTutorialWalkthrough';
 import { GameProvider, useGame } from '@/state/GameProvider';
 import { runStore } from '@/services/gameStorage';
 import { leaderboard, type LeaderboardEntry } from '@/services/leaderboard';
@@ -52,6 +56,14 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
     leaderboard.top(config.leaderboardSize),
   );
 
+  const tutorialSeen = useTutorialSeen();
+  const tutorialSteps = useMemo(() => buildTutorialSteps(config), [config]);
+  const tutorial = useTutorialWalkthrough({
+    steps: tutorialSteps,
+    phase: state.phase,
+    onExit: tutorialSeen.markSeen,
+  });
+
   // Browsers won't start audio outside a user gesture, and `AppShell` is the one
   // instance that outlives every screen, so this is the single place to catch the
   // first click/tap/keypress of a session and start the loop then — whichever
@@ -77,7 +89,19 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
     startGame();
     setCanResume(false);
     setScreen('game');
-  }, [startGame]);
+    // Only the very first "New game" of a browser's lifetime auto-starts the
+    // walkthrough — a restored run never re-triggers it via `resumeGame`, and
+    // every later new run stays silent unless the player asks for it again.
+    if (!tutorialSeen.seen) tutorial.start();
+  }, [startGame, tutorialSeen.seen, tutorial]);
+
+  /** Replays the walkthrough on demand from the landing page, regardless of the seen flag. */
+  const startTutorialReplay = useCallback(() => {
+    startGame();
+    setCanResume(false);
+    setScreen('game');
+    tutorial.start();
+  }, [startGame, tutorial]);
 
   /** Picks up the run already loaded into the provider. */
   const resumeGame = useCallback(() => setScreen('game'), []);
@@ -113,7 +137,13 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
         a row of actions to sit in instead, and renders its own.
         Exit only appears while there is a run to leave.
       */}
-      {screen !== 'landing' && (
+      {/*
+        Hidden (not disabled) while the tutorial runs: its "Exit game" would let
+        a first-time player accidentally abandon the walkthrough mid-flow, and
+        two floating controls competing for the same corner is one too many.
+        Reappears the instant the tutorial ends.
+      */}
+      {screen !== 'landing' && !tutorial.active && (
         <div className={styles.settingsAnchor}>
           <SettingsMenu
             className={styles.settings}
@@ -130,10 +160,21 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
             onNewGame={newGame}
             onResume={canResume ? resumeGame : undefined}
             resumeSummary={canResume ? { round: state.round, score: state.score } : undefined}
+            onShowTutorial={startTutorialReplay}
           />
         )}
 
         {screen === 'game' && <GameScreen />}
+
+        {screen === 'game' && tutorial.active && tutorial.step && (
+          <TutorialOverlay
+            step={tutorial.step}
+            stepIndex={tutorial.stepIndex}
+            totalSteps={tutorial.totalSteps}
+            onAdvance={tutorial.advance}
+            onSkip={tutorial.skip}
+          />
+        )}
 
         {screen === 'summary' && (
           <SummaryScreen

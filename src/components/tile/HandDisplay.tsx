@@ -35,6 +35,8 @@ interface HandDisplayProps {
    * of repeating the same top-down order twice.
    */
   mirrored?: boolean;
+  /** Anchor for the tutorial overlay to highlight this hand. */
+  tutorialTarget?: string;
 }
 
 /** A hand on the table: its tiles plus the total they were worth when dealt. */
@@ -50,6 +52,7 @@ export function HandDisplay({
   entrance = 'none',
   atRiskTypes,
   mirrored = false,
+  tutorialTarget,
 }: HandDisplayProps) {
   const resolved = !hidden && outcome;
 
@@ -64,6 +67,7 @@ export function HandDisplay({
         entrance === 'slide' && styles.slideIn,
         mirrored && styles.mirrored,
       )}
+      data-tutorial-target={tutorialTarget}
     >
       <div className={styles.tiles}>
         {hand

@@ -50,7 +50,7 @@ export function BetControls({ onBet, disabled, chosen, prompt, takeFocus }: BetC
   }, [disabled, onBet]);
 
   return (
-    <div className={styles.controls}>
+    <div className={styles.controls} data-tutorial-target="bet-controls">
       <p className={styles.prompt}>{prompt}</p>
       <div className={styles.buttons}>
         {CHOICES.map(({ choice, arrow, word, hint }, index) => (

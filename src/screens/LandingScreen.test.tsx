@@ -126,6 +126,9 @@ describe('resuming a saved run', () => {
   });
 
   it('keeps the run resumable after leaving the table mid-game', async () => {
+    // Unrelated to onboarding — skip the auto-starting tutorial so Settings
+    // (where "Exit game" lives) is reachable right after "New game".
+    localStorage.setItem('jade-wager.tutorial-seen', 'true');
     const user = userEvent.setup();
     render(<App />);
 

@@ -1,0 +1,145 @@
+/**
+ * z-index scale (the app has no shared token for this yet):
+ *   20 — Settings anchor / its own dropdown panel (App.module.css, SettingsMenu.module.css)
+ *   50 — this overlay, which must always sit above Settings
+ */
+/**
+ * Transparent to the pointer so a real click on the real board underneath —
+ * the actual Higher/Lower buttons, the actual "Next hand" button — still
+ * lands. The spotlight and the callout opt back in individually, the same
+ * shape as `App.module.css`'s `.settingsAnchor`.
+ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.spotlight {
+  position: fixed;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition:
+    top var(--duration-base) var(--ease-out),
+    left var(--duration-base) var(--ease-out),
+    width var(--duration-base) var(--ease-out),
+    height var(--duration-base) var(--ease-out);
+}
+
+/* No spotlight target (the welcome step): dim the whole screen uniformly. */
+.dimAll::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/**
+ * `Panel`'s own "raised" background is a translucent tint, tuned to sit on the
+ * app's ordinary felt/cream background. This callout instead floats over the
+ * dark dimming layer above, so that translucency picked up the dim's black
+ * underneath it — fine in dark mode, but in light mode it turned the panel
+ * into a dark, low-contrast card fighting its own (light-mode) text colours.
+ * An explicit opaque background, the same one `SettingsMenu`'s own dropdown
+ * panel uses, sidesteps that entirely.
+ */
+.callout {
+  position: fixed;
+  z-index: 1;
+  width: min(450px, calc(100vw - var(--space-6)));
+  animation: rise-in var(--duration-slow) var(--ease-out) both;
+  pointer-events: auto;
+  text-align: center;
+  background: var(--bg-raised) !important;
+}
+
+.center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.below {
+  transform: translateX(-50%);
+}
+
+.above {
+  transform: translate(-50%, -100%);
+}
+
+.left {
+  transform: translateY(-50%);
+}
+
+.right {
+  transform: translateY(-50%);
+}
+
+.status {
+  margin: 0;
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+}
+
+.body {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.body strong {
+  color: var(--text);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.skip {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.skip:hover {
+  color: var(--text-muted);
+}
+
+.advance {
+  background: var(--accent);
+  color: var(--felt-900);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hint {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  font-style: italic;
+}
+
+@media (max-width: 1040px) {
+  .callout {
+    width: min(280px, calc(100vw - var(--space-4)));
+  }
+}

@@ -13,7 +13,7 @@ export function RunStats() {
   const { state } = useGame();
 
   return (
-    <Panel title="This run" className={styles.stats}>
+    <Panel title="This run" className={styles.stats} data-tutorial-target="run-stats">
       <div className={styles.score}>
         <Stat label="Score" value={state.score} size="lg" tone="accent" countUp align='center'/>
       </div>

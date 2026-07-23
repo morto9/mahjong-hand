@@ -103,6 +103,94 @@
   margin-top: var(--space-2);
 }
 
+/* Anchors the popup to "Play" without widening the row. */
+.playGroup {
+  position: relative;
+  display: inline-flex;
+}
+
+/**
+ * Positioning only — the visible card is `.playPopupCard`, nested inside.
+ * The gap to "Play" is `padding-bottom` *inside* this box, not a margin
+ * outside it, so there is no dead strip between the trigger and the card
+ * where the pointer stops hovering either of them. That gap is exactly what
+ * made this need a click before: the mouse left `.playGroup` crossing it.
+ *
+ * Hidden via opacity/pointer-events, not `display`, so it stays in the tab
+ * order and keyboard users tabbing onto "Play" can still reach it —
+ * `:focus-within` below reveals it the moment that happens.
+ */
+.playPopup {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: var(--space-2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.playGroup:hover .playPopup,
+.playGroup:focus-within .playPopup {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/**
+ * The actual visible card — same small floating panel `SettingsMenu` drops
+ * its Sound and Mode rows in, not another pill button in the row.
+ */
+.playPopupCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 190px;
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Matches SettingsMenu's `.item` rows exactly — same row, same look. */
+.playPopupItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--text);
+  white-space: nowrap;
+  text-align: left;
+  background: none;
+  border: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.playPopupItem:hover {
+  background: var(--bg-panel-strong);
+  color: var(--text-strong);
+}
+
+/* Matches SettingsMenu's `.icon` exactly — same fixed slot, same alignment. */
+.playPopupIcon {
+  flex: none;
+  width: 1.25em;
+  font-variant-emoji: text;
+  text-align: center;
+}
+
+.playPopupSeparator {
+  height: 1px;
+  margin: var(--space-1) 0;
+  background: var(--border);
+}
+
 .resumeNote {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
