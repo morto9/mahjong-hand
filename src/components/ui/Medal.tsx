@@ -1,11 +1,14 @@
 import { cx } from '@/lib/cx';
 import styles from './Medal.module.css';
 
-/** Podium places, in order. */
-const TIER = ['gold', 'silver', 'bronze'] as const;
-const ORDINAL = ['1st', '2nd', '3rd'] as const;
-
 export type MedalPlace = 1 | 2 | 3;
+
+/** Metal and label per place, keyed so no arithmetic index can slip past the type. */
+const MEDALS: Record<MedalPlace, { tier: keyof typeof styles; ordinal: string }> = {
+  1: { tier: 'gold', ordinal: '1st' },
+  2: { tier: 'silver', ordinal: '2nd' },
+  3: { tier: 'bronze', ordinal: '3rd' },
+};
 
 interface MedalProps {
   place: MedalPlace;
@@ -25,12 +28,12 @@ interface MedalProps {
  * in the list item's text.
  */
 export function Medal({ place, className }: MedalProps) {
-  const tier = place - 1;
+  const { tier, ordinal } = MEDALS[place];
   return (
     <span
-      className={cx(styles.medal, styles[TIER[tier]], className)}
+      className={cx(styles.medal, styles[tier], className)}
       role="img"
-      aria-label={`${ORDINAL[tier]} place`}
+      aria-label={`${ordinal} place`}
     />
   );
 }

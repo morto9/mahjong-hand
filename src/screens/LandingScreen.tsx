@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { Tile } from '@/components/tile/Tile';
 import { Button } from '@/components/ui/Button';
+import { Medal, type MedalPlace } from '@/components/ui/Medal';
 import { Panel } from '@/components/ui/Panel';
 import { SettingsMenu } from '@/components/ui/SettingsMenu';
 import type { GameConfig } from '@/domain/config';
@@ -189,7 +190,12 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
               <ol className={styles.board}>
                 {entries.map((entry, index) => (
                   <li key={entry.id} className={cx(styles.entry, MEDALS[index] && styles[MEDALS[index]!])}>
-                    <span className={styles.rank}>{index + 1}</span>
+                    {/* Top three wear a medal in place of the number; 4th and 5th keep it. */}
+                    {index < 3 ? (
+                      <Medal place={(index + 1) as MedalPlace} />
+                    ) : (
+                      <span className={styles.rank}>{index + 1}</span>
+                    )}
                     <span className={styles.who}>
                       <span className={styles.name}>{entry.name}</span>
                       <span className={styles.meta}>
