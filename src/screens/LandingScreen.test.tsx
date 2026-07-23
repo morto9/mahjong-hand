@@ -37,9 +37,22 @@ describe('the landing page', () => {
     expect(screen.queryByRole('button', { name: /resume/i })).not.toBeInTheDocument();
   });
 
-  it('says so when no scores have been recorded', () => {
+  it('shows placeholder scores to a brand new visitor, not an empty board', () => {
     render(<App />);
-    expect(screen.getByText(/no runs recorded yet/i)).toBeInTheDocument();
+    const board = screen.getByText('Top 5').closest('section') as HTMLElement;
+    expect(within(board).getAllByRole('listitem')).toHaveLength(5);
+    expect(within(board).getByText('Wei')).toBeInTheDocument();
+  });
+
+  it('drops the placeholder scores entirely the moment a real one is recorded', () => {
+    leaderboard.submit({ name: 'Ren', score: 5, rounds: 1, bestStreak: 1 });
+
+    render(<App />);
+
+    const board = screen.getByText('Top 5').closest('section') as HTMLElement;
+    expect(within(board).getAllByRole('listitem')).toHaveLength(1);
+    expect(within(board).getByText('Ren')).toBeInTheDocument();
+    expect(within(board).queryByText('Wei')).not.toBeInTheDocument();
   });
 
   it('lists the top five scores, highest first', () => {

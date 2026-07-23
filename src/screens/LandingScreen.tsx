@@ -113,9 +113,15 @@ export function LandingScreen({
               `:focus-within` is what keeps it reachable by keyboard: tabbing
               onto "Play" reveals it, and it stays revealed while tabbing on
               into the items themselves.
+
+              No `autoFocus` here — that used to belong to the button that
+              actually started the game. "Play" doesn't do anything itself
+              anymore, so autofocusing it on load only had the side effect of
+              popping the menu open (`:focus-within`) the instant the page
+              rendered, with no hover involved.
             */}
             <div className={styles.playGroup}>
-              <Button variant="primary" size="lg" autoFocus>
+              <Button variant="primary" size="lg">
                 Play
               </Button>
 

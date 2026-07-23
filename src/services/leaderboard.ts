@@ -28,6 +28,22 @@ export interface LeaderboardStore {
 /** Versioned so a future schema change can migrate rather than crash. */
 const STORAGE_KEY = 'jade-wager.leaderboard.v1';
 
+/**
+ * Shown on the landing page until a real score is recorded, so a brand new
+ * visitor — including a fresh incognito tab, which has no localStorage of
+ * its own — doesn't land on an empty board. Purely presentational: never
+ * written to storage, never counted by `qualifies`, and it disappears
+ * entirely the instant a single real entry exists — `top()` never blends the
+ * two, so a real run is never sitting behind an unbeatable placeholder.
+ */
+const PLACEHOLDER_ENTRIES: readonly LeaderboardEntry[] = [
+  { id: 'placeholder-1', name: 'Wei', score: 480, rounds: 22, bestStreak: 5, playedAt: 0 },
+  { id: 'placeholder-2', name: 'Mia', score: 350, rounds: 17, bestStreak: 4, playedAt: 0 },
+  { id: 'placeholder-3', name: 'Tao', score: 290, rounds: 14, bestStreak: 3, playedAt: 0 },
+  { id: 'placeholder-4', name: 'Ana', score: 210, rounds: 11, bestStreak: 3, playedAt: 0 },
+  { id: 'placeholder-5', name: 'Kai', score: 150, rounds: 9, bestStreak: 2, playedAt: 0 },
+];
+
 function sortEntries(entries: LeaderboardEntry[]): LeaderboardEntry[] {
   return entries.sort((a, b) => b.score - a.score || b.playedAt - a.playedAt);
 }
@@ -76,7 +92,8 @@ export function createLocalLeaderboard(
 
   return {
     top(limit) {
-      return read().slice(0, limit);
+      const entries = read();
+      return (entries.length > 0 ? entries : PLACEHOLDER_ENTRIES).slice(0, limit);
     },
 
     qualifies(score, limit) {
