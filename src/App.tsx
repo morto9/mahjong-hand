@@ -13,6 +13,7 @@ import type { GameState } from '@/domain/types';
 import { GameProvider, useGame } from '@/state/GameProvider';
 import { runStore } from '@/services/gameStorage';
 import { leaderboard, type LeaderboardEntry } from '@/services/leaderboard';
+import { music } from '@/services/music';
 import { GameScreen } from '@/screens/GameScreen';
 import { LandingScreen } from '@/screens/LandingScreen';
 import { SummaryScreen } from '@/screens/SummaryScreen';
@@ -50,6 +51,17 @@ export function AppShell({ hasRestoredRun }: { hasRestoredRun: boolean }) {
   const [entries, setEntries] = useState<readonly LeaderboardEntry[]>(() =>
     leaderboard.top(config.leaderboardSize),
   );
+
+  // Browsers won't start audio outside a user gesture, and `AppShell` is the one
+  // instance that outlives every screen, so this is the single place to catch the
+  // first click/tap/keypress of a session and start the loop then — whichever
+  // screen the player happened to land on.
+  useEffect(() => {
+    const start = () => music.play();
+    const events = ['pointerdown', 'keydown'] as const;
+    events.forEach((event) => window.addEventListener(event, start, { once: true }));
+    return () => events.forEach((event) => window.removeEventListener(event, start));
+  }, []);
 
   // `game-over` now arrives only when the player dismisses the final round, so
   // this navigates on their click rather than yanking them off the board.

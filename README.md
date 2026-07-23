@@ -85,7 +85,7 @@ src/
 
 Services sit alongside, each behind an interface so the implementation can be swapped without
 touching a component: `leaderboard.ts` (scores), `gameStorage.ts` (resumable runs), `audio.ts`
-(synthesised sound).
+(synthesised sound), `music.ts` (looping background track).
 
 ### Testing
 
@@ -207,9 +207,13 @@ A finished run is cleared rather than saved — it belongs on the summary screen
 - **The board never reflows mid-round.** The next-hand slot is always occupied — by a face-down
   placeholder before a bet, by the dealt hand after — and the action area reserves the height of
   the taller of its two states.
-- **Sound** is synthesised with WebAudio (no asset files): filtered noise for the tile clack,
-  intervals for win/loss/push. The `AudioContext` is created on the first gesture, as autoplay
-  policy requires.
+- **Sound effects** are synthesised with WebAudio (no asset files): filtered noise for the tile
+  clack, intervals for win/loss/push. The `AudioContext` is created on the first gesture, as
+  autoplay policy requires.
+- **Background music** is the one real audio asset in the app (`public/background-music.mp3`,
+  looping, `services/music.ts`) — a five-minute lounge track isn't something worth synthesising.
+  It shares the single "Sound" mute toggle with the SFX and, like the `AudioContext`, only starts
+  on the first gesture of the session.
 - **Keyboard**: `←`/`L` calls lower, `→`/`H` calls higher. Round outcomes are announced through an
   `aria-live` region.
 - The board is one CSS grid reflowed by breakpoint — there is no separate mobile layout.

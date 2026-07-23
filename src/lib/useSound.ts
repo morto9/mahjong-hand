@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { audio } from '@/services/audio';
+import { music } from '@/services/music';
 
 const STORAGE_KEY = 'jade-wager.muted';
 
@@ -22,12 +23,19 @@ function defaultMuted(): boolean {
   return matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-/** Mute preference, persisted and pushed into the audio service. */
+/**
+ * Mute preference, persisted and pushed into both audio services.
+ *
+ * One switch for both: the app has a single "Sound" control, not separate SFX
+ * and music toggles, so this is the one place that preference is applied —
+ * neither service reads localStorage itself.
+ */
 export function useSound() {
   const [muted, setMuted] = useState(readStored);
 
   useEffect(() => {
     audio.setMuted(muted);
+    music.setMuted(muted);
     try {
       localStorage.setItem(STORAGE_KEY, String(muted));
     } catch {

@@ -1,9 +1,11 @@
 /**
- * Sound, synthesised at runtime.
+ * Sound effects, synthesised at runtime.
  *
- * No audio files: every cue is built from oscillators and noise buffers, which
- * keeps the bundle asset-free and makes the sounds tunable as numbers rather
- * than as re-exported waveforms.
+ * No audio files here: every cue is built from oscillators and noise buffers,
+ * which keeps this half of the audio bundle asset-free and makes the sounds
+ * tunable as numbers rather than as re-exported waveforms. Background music
+ * is the one deliberate exception to that rule — it's a real MP3, handled
+ * separately in `services/music.ts` for exactly that reason.
  *
  * Behind an interface for the same reason as the leaderboard — swapping in
  * sampled audio later means one new implementation, not edits across the UI.
