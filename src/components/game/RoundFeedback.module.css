@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: var(--space-3);
   min-height: 132px;
   justify-content: center;
@@ -48,7 +49,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  max-width: 40ch;
+  max-width: 50ch;
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
   border: 1px solid color-mix(in srgb, var(--negative) 45%, transparent);

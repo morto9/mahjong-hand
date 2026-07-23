@@ -20,7 +20,7 @@ const OUTCOME_LABEL = { win: 'Won', loss: 'Lost', push: 'Push' } as const;
  */
 export function HistoryStrip({ rounds, values }: HistoryStripProps) {
   if (rounds.length === 0) {
-    return <p className={styles.empty}>No hands played yet — your first call starts the record.</p>;
+    return <p className={styles.empty}>No hands played yet.</p>;
   }
 
   return (

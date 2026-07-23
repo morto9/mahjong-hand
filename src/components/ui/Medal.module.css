@@ -1,0 +1,52 @@
+/**
+ * A metallic disc struck from the `--medal-*` tokens.
+ *
+ * The radial highlight gives it a struck-metal sheen; the inset rim and drop
+ * shadow lift it off the row. `color-mix` derives the highlight and rim from the
+ * one base colour, so a re-themed medal token carries the whole thing with it.
+ */
+.medal {
+  --m-base: var(--neutral);
+  --m-hi: #ffffff;
+
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, var(--m-hi), var(--m-base) 66%);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--m-base) 55%, black),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+/* Embossed star, purely decorative — a darker cut of the same metal. */
+.medal::before {
+  content: '★';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.82rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--m-base) 42%, #201704);
+  /* ★ is text-default, but pin it so a colour-emoji font cannot hijack it. */
+  font-variant-emoji: text;
+}
+
+.gold {
+  --m-base: var(--medal-gold);
+  --m-hi: color-mix(in srgb, var(--medal-gold) 38%, white);
+}
+
+.silver {
+  --m-base: var(--medal-silver);
+  --m-hi: color-mix(in srgb, var(--medal-silver) 46%, white);
+}
+
+.bronze {
+  --m-base: var(--medal-bronze);
+  --m-hi: color-mix(in srgb, var(--medal-bronze) 42%, white);
+}

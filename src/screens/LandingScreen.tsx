@@ -115,7 +115,7 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
                 src="/logo.png"
                 width={320}
                 height={320}
-                alt="Mahjong Hands — Betting Game"
+                alt="Mahjong Hands"
               />
             </h1>
 
@@ -183,7 +183,7 @@ export function LandingScreen({ entries, onNewGame, onResume }: LandingScreenPro
           <Panel title="Top 5" raised>
             {entries.length === 0 ? (
               <p className={styles.emptyBoard}>
-                No runs recorded yet. The first hand you survive sets the mark.
+                No runs recorded yet.
               </p>
             ) : (
               <ol className={styles.board}>
